@@ -1,0 +1,16 @@
+[
+  {
+    "model": "api_app.User",
+    "pk": 1,
+    "fields": {
+      "login": "login_1"
+    }
+  },
+    {
+    "model": "api_app.User",
+    "pk": 2,
+    "fields": {
+      "login": "login_2"
+    }
+  }
+]
