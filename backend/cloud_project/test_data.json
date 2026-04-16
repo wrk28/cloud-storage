@@ -3,14 +3,23 @@
     "model": "api_app.User",
     "pk": 1,
     "fields": {
-      "login": "login_1"
+      "login": "login_1",
+      "name": "user_1",
+      "email": "login_1@email.ru",
+      "password_hash": "",
+      "is_admin": true
+
     }
   },
     {
     "model": "api_app.User",
     "pk": 2,
     "fields": {
-      "login": "login_2"
+      "login": "login_2",
+      "name": "user_2",
+      "email": "login_2@email.ru",
+      "password_hash": "",
+      "is_admin": false
     }
   }
 ]
