@@ -5,8 +5,10 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from api_app.models import File
 from django.db.models import Count, Sum
-from api_app.serializers import UserListSerializer, UserPatchSerializer, FileListSerializer, FilePatchSerializer
+from api_app.serializers import UserListSerializer, UserPatchSerializer, FileListSerializer, FilePatchSerializer, FileUploadSerializer
 from api_app.permissions import IsStaffUser
+from django.conf import settings
+
 
 class UserView(APIView):
 
@@ -38,14 +40,12 @@ class UserView(APIView):
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
-        
         if user.is_superuser:
             return Response({
                 'message': 'Forbidden',
                 'status': 'error'
             },
             status=status.HTTP_403_FORBIDDEN)
-
         user.delete()
         self._delete_user_files(user_id)
         return Response({
@@ -65,14 +65,12 @@ class UserView(APIView):
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
-        
         if user.is_superuser:
             return Response({
                 'message': 'Forbidden',
                 'status': 'error'
             },
             status=status.HTTP_403_FORBIDDEN)
-
         serializer = UserPatchSerializer(user, request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -135,6 +133,29 @@ class FileView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class FileUploadView(APIView):
+
+    def post(self, request):
+        serializer = FileUploadSerializer(data=request.data)
+        if serializer.is_valid():
+            file = serializer.validated_data('file')
+            file_name = 'test'
+            file_path = settings.MEDIA_DIR + file_name
+            with open(file_path, 'wb+') as p:
+                p.write(file)
+            file_data = {
+                'user': request.user_id,
+                'name': request.data.file_name,
+                'storage': '',
+                'link': '',
+                'description': '',
+                'size': ''
+            }
+            File.objects.create(**file_data)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
