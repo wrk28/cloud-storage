@@ -142,18 +142,22 @@ class FileUploadView(APIView):
     def post(self, request):
         serializer = FileUploadSerializer(data=request.data)
         if serializer.is_valid():
+            import uuid
             file = serializer.validated_data('file')
-            file_name = 'test'
-            file_path = settings.MEDIA_DIR + file_name
-            with open(file_path, 'wb+') as p:
+            name = uuid.uuid4()[:6] + '_' + request.data.file_name
+            path = settings.MEDIA_DIR + name
+            description = request.data.description
+            link = uuid.uuid4()[:8]
+            size = file.size
+            with open(path, 'wb+') as p:
                 p.write(file)
             file_data = {
                 'user': request.user_id,
-                'name': request.data.file_name,
-                'storage': '',
-                'link': '',
-                'description': '',
-                'size': ''
+                'name': name,
+                'storage': path,
+                'link': link,
+                'description': description,
+                'size': size
             }
             File.objects.create(**file_data)
         else:
