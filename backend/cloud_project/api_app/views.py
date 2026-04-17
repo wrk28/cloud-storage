@@ -24,6 +24,9 @@ class UserView(APIView):
             'status': 'success'
         },
         status=status.HTTP_200_OK)
+    
+    def _delete_user_files(self, user_id):
+        pass
         
     def delete(self, request):
         user_id = request.query_params.get('user_id');
@@ -44,6 +47,7 @@ class UserView(APIView):
             status=status.HTTP_403_FORBIDDEN)
 
         user.delete()
+        self._delete_user_files(user_id)
         return Response({
             'message': 'User record was deleted',
             'status': 'success'
