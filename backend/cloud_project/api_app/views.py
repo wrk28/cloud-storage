@@ -67,21 +67,29 @@ class UserView(APIView):
             },
             status=status.HTTP_403_FORBIDDEN)
         
-        is_staff = request.data.get('is_staff')
-        if isinstance(is_staff, bool):
-            user.is_staff = is_staff
-            user.save()
-            return Response({
-                'message': 'User admin status was updated',
-                'status': 'success'
-            },
-            status=status.HTTP_200_OK)
+        # is_staff = request.data.get('is_staff')
+
+        serializer = UserSerializer(user, request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         else:
-            return Response({
-                'message': 'Admin status must be bool type',
-                'status': 'error'
-            },
-            status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+        # if isinstance(is_staff, bool):
+        #     user.is_staff = is_staff
+        #     user.save()
+        #     return Response({
+        #         'message': 'User admin status was updated',
+        #         'status': 'success'
+        #     },
+        #     status=status.HTTP_200_OK)
+        # else:
+        #     return Response({
+        #         'message': 'Admin status must be bool type',
+        #         'status': 'error'
+        #     },
+        #     status=status.HTTP_400_BAD_REQUEST)
 
 
     
