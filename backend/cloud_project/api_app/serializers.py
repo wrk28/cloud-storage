@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from api_app.models import User, File
 
-class UserSerializer(serializers.ModelSerializer):
+class UserListSerializer(serializers.ModelSerializer):
+    file_count = serializers.IntegerField(read_only=True)
+    total_size = serializers.IntegerField(read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'file_count', 'total_size']
+
+class UserPatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'is_staff']
 
 class FileSerializer(serializers.ModelSerializer):
     class Meta:

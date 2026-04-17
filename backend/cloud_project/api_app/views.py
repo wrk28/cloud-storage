@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.contrib.auth.models import User
-from api_app.serializers import UserSerializer
+from django.db.models import Count, Sum
+from api_app.serializers import UserListSerializer, UserPatchSerializer
 from api_app.permissions import IsStaffUser
 
 class UserView(APIView):
@@ -12,8 +13,11 @@ class UserView(APIView):
 
 
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
+        #users = User.objects.all()
+        users = User.objects.annotate(
+            file_count=Count('file'),
+            total_size=Sum('file__size'))
+        serializer = UserListSerializer(users, many=True)
         data = serializer.data
         return Response({
             'data': data,
@@ -66,30 +70,13 @@ class UserView(APIView):
                 'status': 'error'
             },
             status=status.HTTP_403_FORBIDDEN)
-        
-        # is_staff = request.data.get('is_staff')
 
-        serializer = UserSerializer(user, request.data, partial=True)
+        serializer = UserPatchSerializer(user, request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
-        # if isinstance(is_staff, bool):
-        #     user.is_staff = is_staff
-        #     user.save()
-        #     return Response({
-        #         'message': 'User admin status was updated',
-        #         'status': 'success'
-        #     },
-        #     status=status.HTTP_200_OK)
-        # else:
-        #     return Response({
-        #         'message': 'Admin status must be bool type',
-        #         'status': 'error'
-        #     },
-        #     status=status.HTTP_400_BAD_REQUEST)
 
 
     
