@@ -8,6 +8,7 @@ from django.db.models import Count, Sum
 from api_app.serializers import UserListSerializer, UserPatchSerializer, FileListSerializer, FilePatchSerializer, FileUploadSerializer
 from api_app.permissions import IsStaffUser
 from django.conf import settings
+from django.http import FileResponse
 
 
 class UserView(APIView):
@@ -76,7 +77,7 @@ class UserView(APIView):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FileView(APIView):
@@ -134,7 +135,7 @@ class FileView(APIView):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FileUploadView(APIView):
@@ -161,7 +162,25 @@ class FileUploadView(APIView):
             }
             File.objects.create(**file_data)
         else:
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class FileDownloadView(APIView):
+
+    def get(self, request):
+        import os
+        file_id = request.query_params.get('file_id')
+        file = File.objects.get(pk=file_id)
+        file_path = file.storage
+        file_name = file.name
+        if os.path.exists(file_path):
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_name)
+            return response
+        else:
+            return Response({
+                'message': 'File not found',
+                'status': 'error'
+            }, status=status.HTTP_404_NOT_FOUND)
 
 
 
