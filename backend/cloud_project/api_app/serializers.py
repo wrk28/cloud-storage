@@ -13,7 +13,7 @@ class UserPatchSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'is_staff']
 
-class FileSerializer(serializers.ModelSerializer):
+class FileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'name', 'storage', 'link', 'description', 'size',  'when_uploaded', 'last_download']
+        fields = ['id', 'user', 'name', 'storage', 'link', 'description', 'size',  'when_uploaded', 'last_download']

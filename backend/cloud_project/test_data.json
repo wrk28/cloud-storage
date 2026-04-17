@@ -23,5 +23,61 @@
       "password": "",
       "is_staff": false
     }
+  },
+  {
+    "model": "api_app.File",
+    "pk": 1,
+    "fields": {
+      "user": "1",
+      "name": "file_1.txt",
+      "storage": "home",
+      "link": "http:://home.ru",
+      "description": "File_1",
+      "size": 1024000,
+      "when_uploaded": "2026-01-01",
+      "last_download": "2026-01-01"
+    }
+  },
+  {
+    "model": "api_app.File",
+    "pk": 2,
+    "fields": {
+      "user": "1",
+      "name": "file_2.txt",
+      "storage": "home",
+      "link": "http:://home.ru",
+      "description": "File_2",
+      "size": 1024000,
+      "when_uploaded": "2026-01-01",
+      "last_download": "2026-01-01"
+    }
+  },
+  {
+    "model": "api_app.File",
+    "pk": 3,
+    "fields": {
+      "user": "2",
+      "name": "file_3.txt",
+      "storage": "home",
+      "link": "http:://home.ru",
+      "description": "File_3",
+      "size": 1024000,
+      "when_uploaded": "2026-01-01",
+      "last_download": "2026-01-01"
+    }
+  },
+  {
+    "model": "api_app.File",
+    "pk": 4,
+    "fields": {
+      "user": "2",
+      "name": "file_4.txt",
+      "storage": "home",
+      "link": "http:://home.ru",
+      "description": "File_4",
+      "size": 1024000,
+      "when_uploaded": "2026-01-01",
+      "last_download": "2026-01-01"
+    }
   }
 ]

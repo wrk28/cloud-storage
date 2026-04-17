@@ -1,7 +1,8 @@
 from django.urls import path
-from api_app.views import UserView
+from api_app.views import UserView, FileView
 
 
 urlpatterns = [
     path('users/', UserView.as_view()),
+    path('files/', FileView.as_view()),
 ]

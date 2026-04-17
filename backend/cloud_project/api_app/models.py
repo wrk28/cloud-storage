@@ -10,7 +10,7 @@ class File(models.Model):
     description = models.CharField(max_length=255, null=True)
     size = models.IntegerField(null=True)
     when_uploaded = models.DateTimeField(null=False)
-    last_download = models.DateField(null=True)
+    last_download = models.DateTimeField(null=True)
 
 
 
