@@ -1,25 +1,27 @@
 [
   {
-    "model": "api_app.User",
+    "model": "auth.User",
     "pk": 1,
     "fields": {
-      "login": "login_1",
-      "name": "user_1",
+      "username": "login_1",
+      "first_name": "user_1",
+      "last_name": "user_1",
       "email": "login_1@email.ru",
-      "password_hash": "",
-      "is_admin": true
+      "password": "",
+      "is_staff": true
 
     }
   },
     {
-    "model": "api_app.User",
+    "model": "auth.User",
     "pk": 2,
     "fields": {
-      "login": "login_2",
-      "name": "user_2",
+      "username": "login_2",
+      "first_name": "user_2",
+      "last_name": "user_2",
       "email": "login_2@email.ru",
-      "password_hash": "",
-      "is_admin": false
+      "password": "",
+      "is_staff": false
     }
   }
 ]

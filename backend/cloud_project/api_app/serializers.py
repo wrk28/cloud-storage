@@ -4,9 +4,9 @@ from api_app.models import User, File
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'login', 'first_name', 'last_name', 'email', 'password_hash', 'is_admin', 'creaded_at', 'updated_at']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff']
 
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'name', 'storage', 'link', 'description', 'creaded_at', 'updated_at']
+        fields = ['id', 'name', 'storage', 'link', 'description', 'size',  'when_uploaded', 'last_download']

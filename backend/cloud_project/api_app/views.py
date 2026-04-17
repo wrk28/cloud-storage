@@ -1,13 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from api_app.models import User
+from django.contrib.auth.models import User
 from api_app.serializers import UserSerializer
+from api_app.permissions import IsStaffUser
 
-class UserModelViewSet(APIView):
+class UserView(APIView):
 
-    permission_classes = [IsAdminUser, IsAuthenticated]
+    #permission_classes = [IsStaffUser, IsAuthenticated]
+
 
     def get(self, request):
         users = User.objects.all()
@@ -20,6 +22,7 @@ class UserModelViewSet(APIView):
         },
         status=status.HTTP_200_OK)
         
+
     def delete(self, request, pk):
         try:
             user = User.objects.get(pk=pk)
@@ -36,6 +39,7 @@ class UserModelViewSet(APIView):
         },
         status=status.HTTP_200_OK)
 
+
     def patch(self, request, pk):
         try:
             user = User.objects.get(pk=pk)
@@ -45,9 +49,9 @@ class UserModelViewSet(APIView):
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
-        is_admin = request.data.get('is_admin')
-        if isinstance(is_admin, bool):
-            user.is_admin = is_admin
+        is_staff = request.data.get('is_staff')
+        if isinstance(is_staff, bool):
+            user.is_staff = is_staff
             user.save()
             Response({
                 'message': 'User admin staus was updated',
