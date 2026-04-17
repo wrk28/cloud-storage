@@ -3,5 +3,5 @@ from api_app.views import UserView
 
 
 urlpatterns = [
-    path('users/', UserView.as_view())
+    path('users/', UserView.as_view()),
 ]

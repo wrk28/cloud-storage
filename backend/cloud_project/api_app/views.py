@@ -18,48 +18,66 @@ class UserView(APIView):
         return Response({
             'data': data,
             'message': 'Get data successfully',
-            'status': 'Success'
+            'status': 'success'
         },
         status=status.HTTP_200_OK)
         
+    def delete(self, request):
+        id = request.query_params.get('id');
 
-    def delete(self, request, pk):
         try:
-            user = User.objects.get(pk=pk)
+            user = User.objects.get(pk=id)
         except User.DoesNotExist:
-            Response({
+            return Response({
                 'message': 'User is not found',
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
+        
+        if user.is_superuser:
+            return Response({
+                'message': 'Forbidden',
+                'status': 'error'
+            },
+            status=status.HTTP_403_FORBIDDEN)
+
         user.delete()
-        Response({
+        return Response({
             'message': 'User record was deleted',
             'status': 'success'
         },
         status=status.HTTP_200_OK)
 
 
-    def patch(self, request, pk):
+    def patch(self, request):
+        id = request.query_params.get('id');
         try:
-            user = User.objects.get(pk=pk)
+            user = User.objects.get(pk=id)
         except User.DoesNotExist:
-            Response({
+            return Response({
                 'message': 'User is not found',
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
+        
+        if user.is_superuser:
+            return Response({
+                'message': 'Forbidden',
+                'status': 'error'
+            },
+            status=status.HTTP_403_FORBIDDEN)
+        
         is_staff = request.data.get('is_staff')
         if isinstance(is_staff, bool):
             user.is_staff = is_staff
             user.save()
-            Response({
-                'message': 'User admin staus was updated',
+            return Response({
+                'message': 'User admin status was updated',
                 'status': 'success'
             },
             status=status.HTTP_200_OK)
         else:
-            Response({
+            return Response({
                 'message': 'Admin status must be bool type',
                 'status': 'error'
             },
