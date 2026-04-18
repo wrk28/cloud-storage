@@ -4,7 +4,7 @@
 .vscode
 .idea
 
-__pycache__/
+**__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -16,8 +16,8 @@ db.sqlite3
 media/
 staticfiles/
 
-*/migrations/*.py
-*/migrations/*.pyc
+**/migrations/*.py
+**/migrations/*.pyc
 
 *.bak
 *.swp
