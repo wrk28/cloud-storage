@@ -102,7 +102,7 @@ class FileView(APIView):
 
 
     def delete(self, request):
-        file_id = request.query_params.get('file_id');
+        file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
         except File.DoesNotExist:
@@ -141,26 +141,29 @@ class FileView(APIView):
 class FileUploadView(APIView):
 
     def post(self, request):
-        serializer = FileUploadSerializer(data=request.data)
+        import uuid
+        user = request.query_params.get('user_id')
+        file = request.FILES.get('file')
+        name = str(uuid.uuid4())[:6] + '_' + request.data.get('file_name')
+        description = request.data.get('description')
+        storage = settings.MEDIA_DIR + name
+        link = str(uuid.uuid4())[:8]
+        size = file.size
+        with open(storage, 'wb+') as p:
+            for chunk in file.chunks():   
+                p.write(chunk)
+        data = {
+            'user': user,
+            'name': name,
+            'storage': storage,
+            'link': link,
+            'description': description,
+            'size': size
+        }
+        serializer = FileUploadSerializer(data=data)
         if serializer.is_valid():
-            import uuid
-            file = serializer.validated_data('file')
-            name = uuid.uuid4()[:6] + '_' + request.data.file_name
-            path = settings.MEDIA_DIR + name
-            description = request.data.description
-            link = uuid.uuid4()[:8]
-            size = file.size
-            with open(path, 'wb+') as p:
-                p.write(file)
-            file_data = {
-                'user': request.user_id,
-                'name': name,
-                'storage': path,
-                'link': link,
-                'description': description,
-                'size': size
-            }
-            File.objects.create(**file_data)
+            serializer.save();
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -171,10 +174,10 @@ class FileDownloadView(APIView):
         import os
         file_id = request.query_params.get('file_id')
         file = File.objects.get(pk=file_id)
-        file_path = file.storage
-        file_name = file.name
-        if os.path.exists(file_path):
-            response = FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_name)
+        path = file.storage
+        name = file.name
+        if os.path.exists(path):
+            response = FileResponse(open(path, 'rb'), as_attachment=True, filename=name)
             return response
         else:
             return Response({
