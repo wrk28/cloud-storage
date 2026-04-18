@@ -11,6 +11,3 @@ class File(models.Model):
     size = models.IntegerField(null=True)
     when_uploaded = models.DateTimeField(null=False, auto_now_add=True)
     last_download = models.DateTimeField(null=True)
-
-
-

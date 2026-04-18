@@ -28,8 +28,10 @@ class UserView(APIView):
         },
         status=status.HTTP_200_OK)
     
+
     def _delete_user_files(self, user_id):
         pass
+        
         
     def delete(self, request):
         user_id = request.query_params.get('user_id');
