@@ -174,7 +174,7 @@ class FileUploadView(APIView):
         serializer = FileUploadSerializer(data=data)
         if serializer.is_valid():
             serializer.save();
-            return Response({"link": "Success"}, status=status.HTTP_201_CREATED)
+            return Response({"messagge": "Success", "status": "success"}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

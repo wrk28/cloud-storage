@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 
 class RegisterView(generics.CreateAPIView):
-    serializer = RegisterSerializer
+    serializer_class = RegisterSerializer
 
 
 class LoginView(APIView):
