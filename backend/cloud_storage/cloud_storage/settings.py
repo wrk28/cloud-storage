@@ -131,7 +131,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTIFICATION_CLASSES': [
+    'DEFAULT_AUTHENTIFICATION_CLASSES': (
         'rest_framework.authentification.SessionAuthentification'
-    ]
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthentificated'
+    )
 }
