@@ -8,7 +8,8 @@
       "last_name": "user_1",
       "email": "login_1@email.ru",
       "password": "",
-      "is_staff": true
+      "is_staff": true,
+      "is_superuser": false
 
     }
   },
@@ -21,7 +22,8 @@
       "last_name": "user_2",
       "email": "login_2@email.ru",
       "password": "",
-      "is_staff": false
+      "is_staff": false,
+      "is_superuser": false
     }
   },
   {
@@ -30,8 +32,8 @@
     "fields": {
       "user": "1",
       "name": "file_1.txt",
-      "storage": "home",
-      "link": "http:://home.ru",
+      "path": "home1",
+      "link": "http:://home.ru/1",
       "description": "File_1",
       "size": 1024000,
       "when_uploaded": "2026-01-01",
@@ -44,8 +46,8 @@
     "fields": {
       "user": "1",
       "name": "file_2.txt",
-      "storage": "home",
-      "link": "http:://home.ru",
+      "path": "home2",
+      "link": "http:://home.ru/2",
       "description": "File_2",
       "size": 1024000,
       "when_uploaded": "2026-01-01",
@@ -58,8 +60,8 @@
     "fields": {
       "user": "2",
       "name": "file_3.txt",
-      "storage": "home",
-      "link": "http:://home.ru",
+      "path": "home3",
+      "link": "http:://home.ru/3",
       "description": "File_3",
       "size": 1024000,
       "when_uploaded": "2026-01-01",
@@ -72,8 +74,8 @@
     "fields": {
       "user": "2",
       "name": "file_4.txt",
-      "storage": "home",
-      "link": "http:://home.ru",
+      "path": "home4",
+      "link": "http:://home.ru/4",
       "description": "File_4",
       "size": 1024000,
       "when_uploaded": "2026-01-01",

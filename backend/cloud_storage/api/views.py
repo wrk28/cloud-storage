@@ -10,6 +10,8 @@ from api.permissions import IsStaffUser
 from django.conf import settings
 from django.http import FileResponse
 from django.utils import timezone
+import os
+from pathlib import Path
 
 
 class UserView(APIView):
@@ -31,7 +33,10 @@ class UserView(APIView):
     
 
     def _delete_user_files(self, user_id):
-        pass
+        path_list = list(File.objects.values_list('path', flat=True))
+        File.objects.filter(user_id=user_id).delete();
+        for path in path_list:
+            self._delete_file_from_storage(path)
         
         
     def delete(self, request):
@@ -51,7 +56,14 @@ class UserView(APIView):
             },
             status=status.HTTP_403_FORBIDDEN)
         user.delete()
-        self._delete_user_files(user_id)
+        try:
+            self._delete_user_files(user_id)
+        except RuntimeError as e:
+            return Response({
+                "message": f"File was not deleted, {e}",
+                "status": "error"
+                },
+            status=status.HTTP_409_CONFLICT)
         return Response({
             'message': 'User record was deleted',
             'status': 'success'
@@ -100,9 +112,15 @@ class FileView(APIView):
         status=status.HTTP_200_OK)
     
 
-    def _delete_file_from_storage(self, file_id):
-        pass
-
+    def _delete_file_from_storage(self, path):
+        folder_path = Path(settings.MEDIA_DIR).resolve()
+        file_path = Path(path).resolve()
+        if not os.path.exists(path):
+            raise RuntimeError("File not found")
+        if not file_path in folder_path:
+            raise RuntimeError("Wrong path")
+        os.remove(path)
+            
 
     def delete(self, request):
         file_id = request.query_params.get('file_id')
@@ -114,7 +132,14 @@ class FileView(APIView):
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
-        self._delete_file_from_storage(file_id)
+        path = file.path
+        try:
+            self._delete_file_from_storage(path)
+        except RuntimeError as e:
+            return Response({
+                "message": f"File was not deleted, {e}", 
+                "status": "error"}, 
+                status=status.HTTP_409_CONFLICT)
         file.delete()
         return Response({
             'message': 'File was deleted',
@@ -149,16 +174,16 @@ class FileUploadView(APIView):
         file = request.FILES.get('file')
         name = str(uuid.uuid4())[:6] + '_' + request.data.get('file_name')
         description = request.data.get('description')
-        storage = settings.MEDIA_DIR + name
+        path = settings.MEDIA_DIR + name
         link = str(uuid.uuid4())[:8]
         size = file.size
-        with open(storage, 'wb+') as p:
+        with open(path, 'wb+') as p:
             for chunk in file.chunks():   
                 p.write(chunk)
         data = {
             'user': user,
             'name': name,
-            'storage': storage,
+            'path': path,
             'link': link,
             'description': description,
             'size': size
@@ -174,10 +199,9 @@ class FileUploadView(APIView):
 class FileDownloadView(APIView):
 
     def get(self, request):
-        import os
         file_id = request.query_params.get('file_id')
         file = File.objects.get(pk=file_id)
-        path = file.storage
+        path = file.path
         name = file.name
         if os.path.exists(path):
             file.last_download = timezone.now()
@@ -192,10 +216,9 @@ class FileDownloadView(APIView):
         
 class FileExternalDownload(APIView):
     def get(self, request):
-        import os
         link = request.query_params.get('link')
         file = File.objects.get(link=link)
-        path = file.storage
+        path = file.path
         name = file.name
         if os.path.exists(path):
             file.last_download = timezone.now()

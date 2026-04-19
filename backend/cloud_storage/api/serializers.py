@@ -6,7 +6,7 @@ class UserListSerializer(serializers.ModelSerializer):
     total_size = serializers.IntegerField(read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'file_count', 'total_size']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser', 'file_count', 'total_size']
 
 class UserPatchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +16,7 @@ class UserPatchSerializer(serializers.ModelSerializer):
 class FileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'user', 'name', 'storage', 'link', 'description', 'size',  'when_uploaded', 'last_download']
+        fields = ['id', 'user', 'name', 'path', 'link', 'description', 'size',  'when_uploaded', 'last_download']
 
 class FilePatchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,4 +26,4 @@ class FilePatchSerializer(serializers.ModelSerializer):
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'user', 'name', 'storage', 'link', 'description', 'size']
+        fields = ['id', 'user', 'name', 'path', 'link', 'description', 'size']
