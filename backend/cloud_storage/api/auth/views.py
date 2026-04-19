@@ -3,6 +3,7 @@ from api.auth.serializers import RegisterSerializer
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.utils import timezone
 
 
 class RegisterView(generics.CreateAPIView):
@@ -16,6 +17,8 @@ class LoginView(APIView):
         user = authenticate(request=request, username=username, password=password)
         if user is not None:
             login(request, user);
+            user.last_login = timezone.now()
+            user.save()
             return Response({
                 "message": "Success login",
                 "status": "Success"

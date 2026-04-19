@@ -1,17 +1,18 @@
+from django.contrib.auth.models import User
+from django.db.models import Count, Sum
+from django.conf import settings
+from django.http import FileResponse
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from django.contrib.auth.models import User
 from api.models import File
-from django.db.models import Count, Sum
-from api.serializers import UserListSerializer, UserPatchSerializer, FileListSerializer, FilePatchSerializer, FileUploadSerializer
 from api.permissions import IsStaffUser
-from django.conf import settings
-from django.http import FileResponse
-from django.utils import timezone
+from api.serializers import UserListSerializer, UserPatchSerializer, \
+    FileListSerializer, FilePatchSerializer, FileUploadSerializer
+from api.lib.services import delete_file_from_storage, delete_user_files
 import os
-from pathlib import Path
 
 
 class UserView(APIView):
@@ -214,23 +215,6 @@ class FileExternalDownload(APIView):
                 'status': 'error'
             }, status=status.HTTP_404_NOT_FOUND)
 
-
-def _delete_file_from_storage(path):
-    folder_path = Path(settings.MEDIA_DIR).resolve()
-    file_path = Path(path).resolve()
-    if not os.path.exists(path):
-        raise RuntimeError("File not found")
-    if not file_path.relative_to(folder_path):
-        raise RuntimeError("Wrong path")
-    os.remove(path)
-
-
-def _delete_user_files(user_id):
-        path_list = list(File.objects.values_list('path', flat=True))
-        print(path_list)
-        File.objects.filter(user_id=user_id).delete();
-        for path in path_list:
-            _delete_file_from_storage(path)
 
 
 
