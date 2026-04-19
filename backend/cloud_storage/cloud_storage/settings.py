@@ -135,6 +135,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentification.SessionAuthentification'
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthentificated'
+        'rest_framework.permissions.IsAuthenticated'
     )
 }
