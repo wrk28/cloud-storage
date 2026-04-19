@@ -51,7 +51,7 @@ class UserView(APIView):
             status=status.HTTP_403_FORBIDDEN)
         user.delete()
         try:
-            _delete_user_files(user_id)
+            delete_user_files(user_id)
         except RuntimeError as e:
             return Response({
                 "message": f"Error when delete user, {e}",
@@ -118,7 +118,7 @@ class FileView(APIView):
             status=status.HTTP_404_NOT_FOUND)
         path = file.path
         try:
-            _delete_file_from_storage(path)
+            delete_file_from_storage(path)
         except RuntimeError as e:
             return Response({
                 "message": f"Error when delete file, {e}", 
