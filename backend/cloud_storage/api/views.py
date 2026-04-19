@@ -30,13 +30,6 @@ class UserView(APIView):
             'status': 'success'
         },
         status=status.HTTP_200_OK)
-    
-
-    def _delete_user_files(self, user_id):
-        path_list = list(File.objects.values_list('path', flat=True))
-        File.objects.filter(user_id=user_id).delete();
-        for path in path_list:
-            self._delete_file_from_storage(path)
         
         
     def delete(self, request):
@@ -57,10 +50,10 @@ class UserView(APIView):
             status=status.HTTP_403_FORBIDDEN)
         user.delete()
         try:
-            self._delete_user_files(user_id)
+            _delete_user_files(user_id)
         except RuntimeError as e:
             return Response({
-                "message": f"File was not deleted, {e}",
+                "message": f"Error when delete user, {e}",
                 "status": "error"
                 },
             status=status.HTTP_409_CONFLICT)
@@ -110,16 +103,6 @@ class FileView(APIView):
             'status': 'success'
         },
         status=status.HTTP_200_OK)
-    
-
-    def _delete_file_from_storage(self, path):
-        folder_path = Path(settings.MEDIA_DIR).resolve()
-        file_path = Path(path).resolve()
-        if not os.path.exists(path):
-            raise RuntimeError("File not found")
-        if not file_path in folder_path:
-            raise RuntimeError("Wrong path")
-        os.remove(path)
             
 
     def delete(self, request):
@@ -134,10 +117,10 @@ class FileView(APIView):
             status=status.HTTP_404_NOT_FOUND)
         path = file.path
         try:
-            self._delete_file_from_storage(path)
+            _delete_file_from_storage(path)
         except RuntimeError as e:
             return Response({
-                "message": f"File was not deleted, {e}", 
+                "message": f"Error when delete file, {e}", 
                 "status": "error"}, 
                 status=status.HTTP_409_CONFLICT)
         file.delete()
@@ -232,7 +215,22 @@ class FileExternalDownload(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
 
 
+def _delete_file_from_storage(path):
+    folder_path = Path(settings.MEDIA_DIR).resolve()
+    file_path = Path(path).resolve()
+    if not os.path.exists(path):
+        raise RuntimeError("File not found")
+    if not file_path.relative_to(folder_path):
+        raise RuntimeError("Wrong path")
+    os.remove(path)
 
+
+def _delete_user_files(user_id):
+        path_list = list(File.objects.values_list('path', flat=True))
+        print(path_list)
+        File.objects.filter(user_id=user_id).delete();
+        for path in path_list:
+            _delete_file_from_storage(path)
 
 
 
