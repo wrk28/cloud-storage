@@ -158,9 +158,9 @@ class FileUploadView(APIView):
         import uuid
         user = request.user.id
         file = request.FILES.get('file')
-        name = str(uuid.uuid4())[:6] + '_' + request.data.get('file_name')
+        name = request.data.get('file_name')
         description = request.data.get('description')
-        path = settings.MEDIA_DIR + name
+        path = settings.MEDIA_DIR + str(uuid.uuid4())[:6] + '_' + name
         link = str(uuid.uuid4())[:8]
         size = file.size
         with open(path, 'wb+') as p:

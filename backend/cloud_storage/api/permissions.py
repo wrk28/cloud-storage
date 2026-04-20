@@ -1,5 +1,4 @@
 from rest_framework.permissions import BasePermission
-from rest_framework import status
 from django.contrib.auth.models import User
 from api.models import File
 
