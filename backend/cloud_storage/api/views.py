@@ -32,7 +32,6 @@ class UserView(APIView):
         },
         status=status.HTTP_200_OK)
         
-        
     def delete(self, request):
         user_id = request.query_params.get('user_id');
         try:
@@ -64,7 +63,6 @@ class UserView(APIView):
         },
         status=status.HTTP_200_OK)
 
-
     def patch(self, request):
         user_id = request.query_params.get('user_id');
         try:
@@ -91,13 +89,12 @@ class UserView(APIView):
 
 class FileView(APIView):
 
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [IsAuthenticated, IsAdminOrAuthor]
 
     def get(self, request):
         user_id = request.query_params.get('user_id');
-        if not IsAdminOrAuthor.check_user(request, user_id):
-            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
+        user = User.objects.get(pk=user_id)
+        self.check_object_permissions(request, self, user)
         files = File.objects.filter(user=user_id)
         serializer = FileListSerializer(files, many=True)
         data = serializer.data
@@ -108,13 +105,11 @@ class FileView(APIView):
         },
         status=status.HTTP_200_OK)
             
-
     def delete(self, request):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            if not IsAdminOrAuthor.check_user(request, file.user_id):
-                return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
+            self.check_object_permissions(request, self, file)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -136,13 +131,11 @@ class FileView(APIView):
         },
         status=status.HTTP_200_OK)
 
-
     def patch(self, request):
         file_id = request.query_params.get('file_id');
         try:
             file = File.objects.get(pk=file_id)
-            if not IsAdminOrAuthor.check_user(request, file.user_id):
-                return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
+            self.check_object_permissions(request, self, file)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -191,15 +184,13 @@ class FileUploadView(APIView):
 
 class FileDownloadView(APIView):
 
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [IsAuthenticated, IsAdminOrAuthor]
 
     def get(self, request):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            if not IsAdminOrAuthor.check_user(request, file.user_id):
-                return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
+            self.check_object_permissions(request, self, file)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -220,7 +211,6 @@ class FileDownloadView(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
         
 
-        
 class FileExternalDownload(APIView):
 
     def get(self, request):
@@ -238,9 +228,3 @@ class FileExternalDownload(APIView):
                 'message': 'File not found',
                 'status': 'error'
             }, status=status.HTTP_404_NOT_FOUND)
-
-
-
-
-    
-

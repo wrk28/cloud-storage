@@ -1,5 +1,7 @@
 from rest_framework.permissions import BasePermission
 from rest_framework import status
+from django.contrib.auth.models import User
+from api.models import File
 
 
 class IsAdminUser(BasePermission):
@@ -7,19 +9,14 @@ class IsAdminUser(BasePermission):
         return request.user.is_staff or request.user.is_superuser
     
 
-class IsAdminOrAuthor:
-    @staticmethod
-    def check_user(request, user_id):
-        if request.user.id == user_id:
-            return True
+class IsAdminOrAuthor(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if isinstance(obj, User):
+            return request.user == obj
+        elif isinstance(obj, File):
+            return request.user.id == obj.user_id
         else:
             return False
-        
-    message = {
-            'message': 'Forbidden, not admin or author',
-            'status': 'error'
-            }
-    
-    status = status.HTTP_403_FORBIDDEN
+
 
 
