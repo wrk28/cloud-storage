@@ -111,10 +111,10 @@ class FileView(APIView):
 
     def delete(self, request):
         file_id = request.query_params.get('file_id')
-        if not IsAdminOrAuthor.check_file(request, file_id):
-            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         try:
             file = File.objects.get(pk=file_id)
+            if not IsAdminOrAuthor.check_user(request, file.user_id):
+                return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -139,10 +139,10 @@ class FileView(APIView):
 
     def patch(self, request):
         file_id = request.query_params.get('file_id');
-        if not IsAdminOrAuthor.check_file(request, file_id):
-            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         try:
             file = File.objects.get(pk=file_id)
+            if not IsAdminOrAuthor.check_user(request, file.user_id):
+                return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -196,9 +196,16 @@ class FileDownloadView(APIView):
 
     def get(self, request):
         file_id = request.query_params.get('file_id')
-        if not IsAdminOrAuthor.check_file(request, file_id):
-            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
-        file = File.objects.get(pk=file_id)
+        try:
+            file = File.objects.get(pk=file_id)
+            if not IsAdminOrAuthor.check_user(request, file.user_id):
+                return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
+        except File.DoesNotExist:
+            return Response({
+                'message': 'File is not found',
+                'status': 'error'
+            },
+            status=status.HTTP_404_NOT_FOUND)
         path = file.path
         name = file.name
         if os.path.exists(path):
