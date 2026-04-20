@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from api.models import File
-from api.permissions import IsStaffUser
+from api.permissions import IsAdminUser, IsAdminOrAuthor
 from api.serializers import UserListSerializer, UserPatchSerializer, \
     FileListSerializer, FilePatchSerializer, FileUploadSerializer
 from api.lib.services import delete_file_from_storage, delete_user_files
@@ -17,7 +17,7 @@ import os
 
 class UserView(APIView):
 
-    #permission_classes = [IsStaffUser, IsAuthenticated]
+    permission_classes = [IsAdminUser, IsAuthenticated]
 
     def get(self, request):
         users = User.objects.annotate(
@@ -91,10 +91,13 @@ class UserView(APIView):
 
 class FileView(APIView):
 
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
 
     def get(self, request):
         user_id = request.query_params.get('user_id');
+        if not IsAdminOrAuthor.check_user(request, user_id):
+            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         files = File.objects.filter(user=user_id)
         serializer = FileListSerializer(files, many=True)
         data = serializer.data
@@ -108,6 +111,8 @@ class FileView(APIView):
 
     def delete(self, request):
         file_id = request.query_params.get('file_id')
+        if not IsAdminOrAuthor.check_file(request, file_id):
+            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         try:
             file = File.objects.get(pk=file_id)
         except File.DoesNotExist:
@@ -134,6 +139,8 @@ class FileView(APIView):
 
     def patch(self, request):
         file_id = request.query_params.get('file_id');
+        if not IsAdminOrAuthor.check_file(request, file_id):
+            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         try:
             file = File.objects.get(pk=file_id)
         except File.DoesNotExist:
@@ -152,9 +159,11 @@ class FileView(APIView):
 
 class FileUploadView(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         import uuid
-        user = request.query_params.get('user_id')
+        user = request.user.id
         file = request.FILES.get('file')
         name = str(uuid.uuid4())[:6] + '_' + request.data.get('file_name')
         description = request.data.get('description')
@@ -182,8 +191,13 @@ class FileUploadView(APIView):
 
 class FileDownloadView(APIView):
 
+    permission_classes = [IsAuthenticated]
+
+
     def get(self, request):
         file_id = request.query_params.get('file_id')
+        if not IsAdminOrAuthor.check_file(request, file_id):
+            return Response(IsAdminOrAuthor.message, IsAdminOrAuthor.status)
         file = File.objects.get(pk=file_id)
         path = file.path
         name = file.name
@@ -198,7 +212,10 @@ class FileDownloadView(APIView):
                 'status': 'error'
             }, status=status.HTTP_404_NOT_FOUND)
         
+
+        
 class FileExternalDownload(APIView):
+
     def get(self, request):
         link = request.query_params.get('link')
         file = File.objects.get(link=link)

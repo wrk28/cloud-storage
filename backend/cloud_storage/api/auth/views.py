@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
+from rest_framework.permissions import IsAuthenticated
 
 
 class RegisterView(generics.CreateAPIView):
@@ -31,6 +32,9 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         logout(request)
         return Response({
