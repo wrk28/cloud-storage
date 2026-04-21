@@ -25,3 +25,6 @@ staticfiles/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+dist/
+node_modules/
