@@ -22,7 +22,12 @@ class LoginView(APIView):
             user.save()
             return Response({
                 "message": "Success login",
-                "status": "Success"
+                "status": "Success",
+                "auth": {
+                    "username": user.username,
+                    "is_admin": user.is_staff,
+                    "is_authenticated": True
+                }
             }, status=status.HTTP_200_OK)
         else:
             return Response({
