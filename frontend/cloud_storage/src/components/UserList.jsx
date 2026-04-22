@@ -15,18 +15,31 @@ const UserList = () => {
     }
   }, [status, dispatch]);
 
-  console.log(users);
-
   return (
-  <div className="user-list">
-    {Array.isArray(users) ? (
-      users.map((user) => (
-        <UserRecord key={user.id} user={user} />
-      ))
-    ) : (
-      <p>No users</p>
-    )}
-  </div>
+    <div className="user-list">
+      {Array.isArray(users) ? (
+        <table className="user-table">
+          <thead>
+            <tr>
+              <th>Login</th>
+              <th>Email</th>
+              <th>Full Name</th>
+              <th>Number</th>
+              <th>Total Size</th>
+              <th>Admin</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <UserRecord key={user.id} user={user} />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No users</p>
+      )}
+    </div>
   );
 };
 
