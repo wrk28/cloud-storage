@@ -1,0 +1,79 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f9f9f9;
+  color: #555;
+}
+
+.footer-section {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  background-color: #cccccc;
+  color: #222;
+  height: 20px;
+  font-size: 10px;
+}
+
+.top-section {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  background-color: #cccccc;
+  color: #222;
+  min-width: 340px;
+}
+
+.top-caption {
+  margin-right: 40px;
+}
+
+.top-button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #b39c7a;
+  color: #222;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.top-button:hover {
+  background-color: #a78f6b;
+  color: #000;
+}
+
+.middle-section {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 50px);
+  background-color: #e2d8d0;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #d2b59b;
+  display: flex;
+  flex-direction: column;
+  color: #222;
+}
+
+.sidebar-item {
+  padding: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-item:hover {
+  background-color: #b39c7a;
+  color: #222;
+}
+
+.link-style {
+  text-decoration: none;
+  color: inherit;
+}
