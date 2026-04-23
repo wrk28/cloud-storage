@@ -58,14 +58,24 @@ const RegisterForm = () => {
       return
     }
 
-    dispatch(registerUser(registerFormData)).then(() => {
-      dispatch(fetchUsers())
-      e.target.reset()
+    dispatch(registerUser(registerFormData))
+      .unwrap()
+      .then((data) => {
+        if (data && typeof data.username === 'string') {
+        dispatch(fetchUsers())
+        e.target.reset()
         setformMessage("User registered. Now log in.")
           timerRef.current = setTimeout(() => {
             setformMessage('')
         }, 3000)
-    })
+        }
+        else if (Array.isArray(data.username)) {
+          const errorMsg = data.username
+          ? data.username[0]
+          : "Registration error.";
+          setformMessage(`${errorMsg}`);
+        }
+      })
   }
 
   return (
