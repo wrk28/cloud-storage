@@ -232,3 +232,55 @@ input[type="checkbox"] {
 .login-form-container button:hover {
   background-color: #a78f6b;
 }
+
+.file-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.file-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  color: #555;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.file-table th {
+  background-color: #d2b59b;
+  padding: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.file-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.file-table tbody tr:hover {
+  background-color: #e2d8d0;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #b39c7a;
+  color: #222;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+  background-color: #a78f6b;
+  color: #000;
+}

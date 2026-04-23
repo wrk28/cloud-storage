@@ -1,5 +1,8 @@
 import { toggleShowDeleteModal } from '../features/usersFeature';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateUserAdminStatus } from '../features/usersFeature';
+import formatSize from '../services/formatSize';
+import formatFileCount from '../services/formatFileCount';
 import DeleteUserModal from './DeleteUserModal';
 
 const UserRecord = ({ user }) => {
@@ -12,28 +15,6 @@ const UserRecord = ({ user }) => {
 
   const handleDeleteClick = () => {
     dispatch(toggleShowDeleteModal(true));
-  };
-
-  const formatFileCount = (count) => {
-    if (Number.isInteger(count)) {
-      if (count === 0) return '0 files';
-      if (count === 1) return '1 file';
-      return `${count} files`;
-    }
-    return '';
-  };
-
-  const formatSize = (bytes) => {
-    if (!Number.isInteger(bytes) || bytes < 0) return '';
-    const units = ['bytes', 'Kb', 'Mb', 'Gb'];
-    let size = bytes;
-    let unitIndex = 0;
-    while (size >= 1024 && unitIndex < units.length - 1) {
-      size /= 1024;
-      unitIndex++;
-    }
-    const sizeStr = Number.isInteger(size) ? size.toString() : size.toFixed(1);
-    return `${sizeStr} ${units[unitIndex]}`;
   };
 
   return (

@@ -1,21 +1,51 @@
 import { useDispatch } from 'react-redux';
-import { toggleAdminStatus } from '../features/usersFeature';
+import { deleteFile } from '../features/filesFeature';
+import formatSize from '../services/formatSize';
+import formateTime from '../services/formatTime';
 import '../styles.css';
 
-const FileRecord = () => {
+const FileRecord = ({ file }) => {
   const dispatch = useDispatch();
 
-  const handleToggleAdmin = () => {
-    dispatch(toggleAdminStatus(user.id));
+  const handleDownload = () => {
+    
   };
 
+  const handleCopyLink = () => {
+    
+  };
+
+  const handleChange= () => {
+    
+  };
+
+    const handleDelete = () => {
+    dispatch(deleteFile({ id: file.id }));
+  };
+
+  const date = new Date;
+
   return (
-    <div className="file-record">
-      <p>Name: {user.name}</p>
-      <p>Email: {user.email}</p>
-      <p>Admin: {user.is_admin ? 'Yes' : 'No'}</p>
-      <button onClick={handleToggleAdmin}>Toggle Admin</button>
-    </div>
+    <tr>
+      <td>{file.name}</td>
+      <td>{file.description}</td>
+      <td>{formatSize(file.size)}</td>
+      <td>{file.link}</td>
+      <td>{formateTime(file.when_uploaded)}</td>
+      <td>{formateTime(file.last_download)}</td>
+      <td>
+        <button onClick={handleDownload}>Download</button>
+      </td>
+      <td>
+        <button onClick={handleCopyLink}>Copy Link</button>
+      </td>
+      <td>
+        <button onClick={handleChange}>Change</button>
+      </td>
+      <td>
+        <button onClick={handleDelete}>Delete</button>
+      </td>
+    </tr>
   );
 };
 

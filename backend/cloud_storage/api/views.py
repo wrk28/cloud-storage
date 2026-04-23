@@ -17,7 +17,7 @@ import os
 
 class UserView(APIView):
 
-    permission_classes = [IsAdminUser, IsAuthenticated]
+    #permission_classes = [IsAdminUser, IsAuthenticated]
 
     def get(self, request):
         users = User.objects.annotate(
@@ -89,12 +89,19 @@ class UserView(APIView):
 
 class FileView(APIView):
 
-    permission_classes = [IsAuthenticated, IsAdminOrAuthor]
+    #permission_classes = [IsAuthenticated, IsAdminOrAuthor]
 
     def get(self, request):
         user_id = request.query_params.get('user_id');
-        user = User.objects.get(pk=user_id)
-        self.check_object_permissions(request, self, user)
+        # try:
+        #     user = User.objects.get(pk=user_id)
+        # except User.DoesNotExist:
+        #     return Response({
+        #         'message': 'User is not found',
+        #         'status': 'error'
+        #     },
+        #     status=status.HTTP_404_NOT_FOUND)
+        #self.check_object_permissions(request, self, user)
         files = File.objects.filter(user=user_id)
         serializer = FileListSerializer(files, many=True)
         data = serializer.data
@@ -109,7 +116,7 @@ class FileView(APIView):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, self, file)
+            #self.check_object_permissions(request, self, file)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -135,7 +142,7 @@ class FileView(APIView):
         file_id = request.query_params.get('file_id');
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, self, file)
+            #self.check_object_permissions(request, self, file)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
@@ -152,7 +159,7 @@ class FileView(APIView):
 
 class FileUploadView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def post(self, request):
         import uuid
@@ -184,13 +191,13 @@ class FileUploadView(APIView):
 
 class FileDownloadView(APIView):
 
-    permission_classes = [IsAuthenticated, IsAdminOrAuthor]
+    #permission_classes = [IsAuthenticated, IsAdminOrAuthor]
 
     def get(self, request):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, self, file)
+            #self.check_object_permissions(request, self, file)
         except File.DoesNotExist:
             return Response({
                 'message': 'File is not found',
