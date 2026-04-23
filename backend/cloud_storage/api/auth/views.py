@@ -15,14 +15,16 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username');
         password = request.data.get('password');
+        print(f"user:{username}, password{password}")
         user = authenticate(request=request, username=username, password=password)
+        print(f"user_id: {user}")
         if user is not None:
             login(request, user);
             user.last_login = timezone.now()
             user.save()
             return Response({
-                "message": "Success login",
-                "status": "Success",
+                "message": "success login",
+                "status": "success",
                 "auth": {
                     "username": user.username,
                     "is_admin": user.is_staff,
@@ -43,8 +45,8 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response({
-                "message": "Success logot",
-                "status": "Success"
+                "message": "success logot",
+                "status": "success"
             }, status=status.HTTP_200_OK)
 
 

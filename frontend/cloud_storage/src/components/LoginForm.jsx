@@ -1,14 +1,33 @@
+import { useDispatch } from 'react-redux'
+import { useState } from 'react';
+import { loginUser } from '../features/usersFeature';
 import '../styles.css';
 
 const LoginForm = () => {
-  const handleSubmit = (e) => {
+
+  const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const loginData = {
-      login: e.target.login.value,
+
+    const loginFormData = {
+      username: e.target.login.value,
       password: e.target.password.value,
     };
-    // TODO: Add login logic here (e.g., dispatch an action or API call)
-    console.log('Logging in:', loginData);
+
+    dispatch(loginUser(loginFormData))
+      .unwrap()
+      .then((data) => {
+        console.log(data)
+        if (data && data.status === 'success') {
+          setError(null);
+        }
+        else {
+          setError(`${data.message}`);
+        }
+      })
   };
 
   return (
@@ -19,6 +38,7 @@ const LoginForm = () => {
         <input type="password" name="password" placeholder="Password" required />
         <button type="submit">Log in</button>
       </form>
+      {error && <div className='registation-form-message'>{error}</div>}
     </div>
   );
 };
