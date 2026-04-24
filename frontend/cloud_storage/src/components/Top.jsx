@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../features/authFeature';
 import '../styles.css';
 
 const Top = () => {
-  const isLoggedIn = false;
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
 
   return (
     <div className="top-section">
@@ -17,7 +25,7 @@ const Top = () => {
           </Link>
         </div>
       ) : (
-        <button className="top-button">Log out</button>
+        <button className="top-button" onClick={handleLogout}>Log out</button>
       )}
     </div>
   );

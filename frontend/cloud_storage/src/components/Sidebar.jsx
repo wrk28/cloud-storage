@@ -7,9 +7,11 @@ import { uploadFile } from '../features/filesFeature';
 import UploadFileModal from './UploadFileModal';
 
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Sidebar = () => {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -30,15 +32,18 @@ const Sidebar = () => {
       <Link to="/" className="sidebar-item link-style">
         Home
       </Link>
-      <Link to="/users" className="sidebar-item link-style">
-        List of Users
-      </Link>
-      <Link to="/files" className="sidebar-item link-style">
-        List of Files
-      </Link>
-      <button className="sidebar-item" onClick={handleOpenModal}>
-        Upload File
-      </button>
+      {isLoggedIn && (
+        <div>
+          <Link to="/users" className="sidebar-item link-style">
+            List of Users
+          </Link>
+          <Link to="/files" className="sidebar-item link-style">
+            List of Files
+          </Link>
+          <button className="sidebar-item" onClick={handleOpenModal}>
+            Upload File
+          </button>
+        </div>)}
       {isModalOpen && (
         <UploadFileModal onClose={handleCloseModal} onUpload={handleUpload} />
       )}
