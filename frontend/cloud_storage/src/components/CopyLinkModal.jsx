@@ -1,13 +1,14 @@
-const CopyLinkModal = ({ link, onClose }) => {
+const CopyLinkModal = ({ host, link, onClose }) => {
   const handleCopy = () => {
-    navigator.clipboard.writeText(link);
+    navigator.clipboard.writeText(host+link);
+    onClose();
   };
 
   return (
     <div className="modal-backdrop">
       <div className="modal-content">
         <h3>Copy Link</h3>
-        <input type="text" value={link} readOnly/>
+        <input type="text" value={host+link} readOnly/>
         <div className="modal-buttons">
           <button onClick={handleCopy}>Copy</button>
           <button onClick={onClose}>Close</button>

@@ -42,13 +42,15 @@ const FileRecord = ({ file }) => {
     setShowChangeModal(false);
   };
 
+  const host = "http://127.0.0.1:8000/api/download/external/?link="
+
   return (
     <>
       <tr>
         <td>{file.name}</td>
         <td>{file.description}</td>
         <td>{file.size}</td>
-        <td>{file.link}</td>
+        <td>{host}{file.link}</td>
         <td>{file.when_uploaded}</td>
         <td>{file.last_download}</td>
         <td>
@@ -66,7 +68,7 @@ const FileRecord = ({ file }) => {
       </tr>
 
       {showCopyLink && (
-        <CopyLinkModal link={file.link} onClose={() => setShowCopyLink(false)} />
+        <CopyLinkModal host= {host} link={file.link} onClose={() => setShowCopyLink(false)} />
       )}
 
       {showDeleteConfirm && (
