@@ -207,6 +207,7 @@ class FileDownloadView(APIView):
         path = file.path
         name = file.name
         if os.path.exists(path):
+            print(f"path: {path}\n")
             file.last_download = timezone.now()
             file.save()
             response = FileResponse(open(path, 'rb'), as_attachment=True, filename=name)
