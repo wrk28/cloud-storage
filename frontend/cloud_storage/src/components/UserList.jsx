@@ -15,7 +15,6 @@ const UserList = () => {
     }
   }, [status, dispatch]);
 
-  console.log(users);
   return (
     <div className="user-list">
       {Array.isArray(users) ? (

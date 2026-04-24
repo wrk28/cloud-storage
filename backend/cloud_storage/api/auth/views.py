@@ -15,9 +15,7 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username');
         password = request.data.get('password');
-        print(f"user:{username}, password{password}")
         user = authenticate(request=request, username=username, password=password)
-        print(f"user_id: {user}")
         if user is not None:
             login(request, user);
             user.last_login = timezone.now()

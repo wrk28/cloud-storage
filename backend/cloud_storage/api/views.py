@@ -13,7 +13,9 @@ from api.serializers import UserListSerializer, UserPatchSerializer, \
     FileListSerializer, FilePatchSerializer, FileUploadSerializer
 from api.lib.services import delete_file_from_storage, delete_user_files
 import os
+import logging
 
+logger = logging.getLogger(__name__);
 
 class UserView(APIView):
 
@@ -25,6 +27,7 @@ class UserView(APIView):
             total_size=Sum('file__size'))
         serializer = UserListSerializer(users, many=True)
         data = serializer.data
+        logger.info("info: Getting user list")
         return Response({
             'data': data,
             'message': 'Get data successfully',
@@ -36,13 +39,15 @@ class UserView(APIView):
         user_id = request.query_params.get('user_id');
         try:
             user = User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+        except User.DoesNotExist as e:
+            logger.error(f"Error: {e}")
             return Response({
                 'message': 'User is not found',
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
         if user.is_superuser:
+            logger.warning("Warning: Trying to delete superuser")
             return Response({
                 'message': 'Forbidden',
                 'status': 'error'
@@ -52,11 +57,13 @@ class UserView(APIView):
         try:
             delete_user_files(user_id)
         except RuntimeError as e:
+            logger.error(f"Error: {e}")
             return Response({
                 "message": f"Error when delete user, {e}",
                 "status": "error"
                 },
             status=status.HTTP_409_CONFLICT)
+        logger.info("Info: Deleting user record")
         return Response({
             'message': 'User record was deleted',
             'status': 'success'
@@ -67,13 +74,15 @@ class UserView(APIView):
         user_id = request.query_params.get('user_id');
         try:
             user = User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+        except User.DoesNotExist as e:
+            logger.error(f"Error: {e}")
             return Response({
                 'message': 'User is not found',
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
         if user.is_superuser:
+            logger.warning("Warning: Trying to delete superuser")
             return Response({
                 'message': 'Forbidden',
                 'status': 'error'
@@ -81,9 +90,11 @@ class UserView(APIView):
             status=status.HTTP_403_FORBIDDEN)
         serializer = UserPatchSerializer(user, request.data, partial=True)
         if serializer.is_valid():
+            logger.info("Info: Changing user status")
             serializer.save()
             return Response(serializer.data)
         else:
+            logger.error(f"Error: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -93,18 +104,20 @@ class FileView(APIView):
 
     def get(self, request):
         user_id = request.query_params.get('user_id');
-        # try:
-        #     user = User.objects.get(pk=user_id)
-        # except User.DoesNotExist:
-        #     return Response({
-        #         'message': 'User is not found',
-        #         'status': 'error'
-        #     },
-        #     status=status.HTTP_404_NOT_FOUND)
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist as e:
+            logger.error(f"Error: {e}")
+            return Response({
+                'message': 'User is not found',
+                'status': 'error'
+            },
+            status=status.HTTP_404_NOT_FOUND)
         #self.check_object_permissions(request, self, user)
         files = File.objects.filter(user=user_id)
         serializer = FileListSerializer(files, many=True)
         data = serializer.data
+        logger.info("Info: Getting file list")
         return Response({
             'data': data,
             'message': 'Get data successfully',
@@ -117,7 +130,8 @@ class FileView(APIView):
         try:
             file = File.objects.get(pk=file_id)
             #self.check_object_permissions(request, self, file)
-        except File.DoesNotExist:
+        except File.DoesNotExist as e:
+            logger.error(f"Error: {e}")
             return Response({
                 'message': 'File is not found',
                 'status': 'error'
@@ -127,11 +141,13 @@ class FileView(APIView):
         try:
             delete_file_from_storage(path)
         except RuntimeError as e:
+            logger.error(f"Error: {e}")
             return Response({
                 "message": f"Error when delete file, {e}", 
                 "status": "error"}, 
                 status=status.HTTP_409_CONFLICT)
         file.delete()
+        logger.info("Info: Deliting file")
         return Response({
             'message': 'File was deleted',
             'status': 'success'
@@ -143,7 +159,8 @@ class FileView(APIView):
         try:
             file = File.objects.get(pk=file_id)
             #self.check_object_permissions(request, self, file)
-        except File.DoesNotExist:
+        except File.DoesNotExist as e:
+            logger.error(f"Error: {e}")
             return Response({
                 'message': 'File is not found',
                 'status': 'error'
@@ -152,8 +169,10 @@ class FileView(APIView):
         serializer = FilePatchSerializer(file, request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            logger.info("Info: Changing file description")
             return Response(serializer.data)
         else:
+            logger.error(f"Error: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -165,7 +184,6 @@ class FileUploadView(APIView):
         import uuid
         user = request.user.id
         file = request.FILES.get('file')
-        print("file is ", file)
         name = request.data.get('file_name')
         description = request.data.get('description')
         path = settings.MEDIA_DIR + str(uuid.uuid4())[:6] + '_' + name
@@ -185,8 +203,10 @@ class FileUploadView(APIView):
         serializer = FileUploadSerializer(data=data)
         if serializer.is_valid():
             serializer.save();
+            logger.info("Info: Uploading file")
             return Response({"messagge": "success", "status": "success"}, status=status.HTTP_201_CREATED)
         else:
+            logger.error(f"Error: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
@@ -199,7 +219,8 @@ class FileDownloadView(APIView):
         try:
             file = File.objects.get(pk=file_id)
             #self.check_object_permissions(request, self, file)
-        except File.DoesNotExist:
+        except File.DoesNotExist as e:
+            logger.error(f"Error: {e}")
             return Response({
                 'message': 'File is not found',
                 'status': 'error'
@@ -208,12 +229,13 @@ class FileDownloadView(APIView):
         path = file.path
         name = file.name
         if os.path.exists(path):
-            print(f"path: {path}\n")
             file.last_download = timezone.now()
             file.save()
             response = FileResponse(open(path, 'rb'), as_attachment=True, filename=name)
+            logger.info("Info: Downloading file")
             return response
         else:
+            logger.error(f"Error: Cannot find the file")
             return Response({
                 'message': 'File not found',
                 'status': 'error'
@@ -231,8 +253,10 @@ class FileExternalDownload(APIView):
             file.last_download = timezone.now()
             file.save()
             response = FileResponse(open(path, 'rb'), as_attachment=True, filename=name)
+            logger.info("Info: Downloading file with a link")
             return response
         else:
+            logger.error(f"Error: Cannot find the file")
             return Response({
                 'message': 'File not found',
                 'status': 'error'

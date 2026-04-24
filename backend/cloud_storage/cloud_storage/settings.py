@@ -78,6 +78,40 @@ CORS_ALLOWED_ORIGINS = [
 #     'default-src': ("'self'", "'unsafe-inline'", "'unsafe-eval'", "*"),
 # }
 
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'verbose': {
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+                },
+            },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'logs.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'api': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+    },
+}
+
+
 ROOT_URLCONF = 'cloud_storage.urls'
 
 TEMPLATES = [

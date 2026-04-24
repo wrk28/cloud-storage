@@ -23,7 +23,6 @@ const LoginForm = () => {
     dispatch(loginUser(loginFormData))
       .unwrap()
       .then((data) => {
-        console.log(data)
         if (data && data.status === 'success') {
           setError(null);
           e.target.login.value="";

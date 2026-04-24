@@ -32,7 +32,6 @@ const authFeature = createSlice({
     builder
       .addCase(loginUser.fulfilled, (state, action) => {
         const responseData = action.payload;
-        console.log("Response data is ", responseData)
         if (responseData.status === "success") {
             state.isLoggedIn = true;
             state.isAdmin = responseData.auth.is_admin === true;

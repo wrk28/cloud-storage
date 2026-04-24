@@ -15,8 +15,6 @@ const FileList = () => {
     }
   }, [status, dispatch]);
 
-  console.log(files);
-
   return (
     <div className="file-list">
       {Array.isArray(files) && files.length > 0 ? (

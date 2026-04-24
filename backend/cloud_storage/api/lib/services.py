@@ -16,7 +16,6 @@ def delete_file_from_storage(path):
 
 def delete_user_files(user_id):
         path_list = list(File.objects.values_list('path', flat=True))
-        print(path_list)
         File.objects.filter(user_id=user_id).delete();
         for path in path_list:
             delete_file_from_storage(path)
