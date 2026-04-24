@@ -46,6 +46,29 @@ export const updateFileDescription = createAsyncThunk(
   }
 );
 
+export const uploadFile = createAsyncThunk(
+  'files/uploadFile',
+  async ({ file, description }, { rejectWithValue }) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('description', description);
+    formData.append('file_name', file.name);
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/upload/', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const filesSlice = createSlice({
   name: 'files',
   initialState: {
@@ -86,6 +109,9 @@ const filesSlice = createSlice({
         if (file) {
           file.description = description;
         }
+      })
+      .addCase(uploadFile.fulfilled, (state, action) => {
+        state.list.push(action.payload);
       });
   },
 });

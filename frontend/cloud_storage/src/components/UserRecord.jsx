@@ -38,7 +38,9 @@ const UserRecord = ({ user }) => {
           />
         </td>
         <td>
-          <button onClick={handleDeleteClick}>Delete</button>
+          <button 
+            onClick={handleDeleteClick}
+            disabled={user.is_superuser}>Delete</button>
         </td>
       </tr>
       {showDeleteModal && <DeleteUserModal />}

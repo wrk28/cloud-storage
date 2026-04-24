@@ -7,7 +7,7 @@ class File(models.Model):
     name = models.CharField(max_length=50, null=False)
     path = models.CharField(max_length=255, unique=True, null=False)
     link = models.CharField(max_length=50, unique=True, null=True)
-    description = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
     size = models.IntegerField(null=True)
     when_uploaded = models.DateTimeField(null=False, auto_now_add=True)
     last_download = models.DateTimeField(null=True)
