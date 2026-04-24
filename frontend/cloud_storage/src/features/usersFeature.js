@@ -46,21 +46,6 @@ export const deleteUserRecord = createAsyncThunk(
   }
 );
 
-// export const loginUser = createAsyncThunk(
-//   'users/loginUser',
-//   async (credentials) => {
-//     const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(credentials),
-//     });
-//     const data = await response.json();
-//     return data;
-//   }
-// );
-
 const usersFeature = createSlice({
   name: 'users',
   initialState: {
@@ -99,17 +84,6 @@ const usersFeature = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
-      // .addCase(loginUser.pending, (state) => {
-      //   state.status = 'loading';
-      // })
-      // .addCase(loginUser.fulfilled, (state, action) => {
-      //   state.status = 'succeeded';
-      //   state.currentUser = action.payload;
-      // })
-      // .addCase(loginUser.rejected, (state, action) => {
-      //   state.status = 'failed';
-      //   state.error = action.error.message;
-      // })
       .addCase(deleteUserRecord.fulfilled, (state, action) => {
         state.list = state.list.filter((user) => user.id !== action.payload);
       });

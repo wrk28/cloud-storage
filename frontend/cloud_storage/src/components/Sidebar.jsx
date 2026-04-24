@@ -33,17 +33,20 @@ const Sidebar = () => {
         Home
       </Link>
       {isLoggedIn && (
-        <div>
           <Link to="/users" className="sidebar-item link-style">
-            List of Users
+            Administration
           </Link>
+      )}
+      {isLoggedIn && (
           <Link to="/files" className="sidebar-item link-style">
-            List of Files
+            My Files
           </Link>
-          <button className="sidebar-item" onClick={handleOpenModal}>
+      )}
+      {isLoggedIn && (
+          <button className="sidebar-item link-style" onClick={handleOpenModal}>
             Upload File
           </button>
-        </div>)}
+      )}
       {isModalOpen && (
         <UploadFileModal onClose={handleCloseModal} onUpload={handleUpload} />
       )}

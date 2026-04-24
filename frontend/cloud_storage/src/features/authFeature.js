@@ -20,17 +20,27 @@ const authFeature = createSlice({
   name: 'auth',
   initialState: {
     isLoggedIn: false,
-    // userData: null,
+    isAdmin: false,
   },
   reducers: {
     logout: (state) => {
       state.isLoggedIn = false;
+      state.isAdmin = false;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.fulfilled, (state) => {
-        state.isLoggedIn = true;
+      .addCase(loginUser.fulfilled, (state, action) => {
+        const responseData = action.payload;
+        console.log("Response data is ", responseData)
+        if (responseData.status === "success") {
+            state.isLoggedIn = true;
+            state.isAdmin = responseData.auth.is_admin === true;
+        }
+        else {
+            state.isLoggedIn = false;
+            state.isAdmin = false;
+        }    
       });
   },
 });

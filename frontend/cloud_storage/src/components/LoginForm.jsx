@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useState } from 'react';
 import { loginUser } from '../features/authFeature';
+import { useNavigate } from 'react-router-dom';
 import '../styles.css';
 
 const LoginForm = () => {
@@ -8,6 +9,8 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +26,9 @@ const LoginForm = () => {
         console.log(data)
         if (data && data.status === 'success') {
           setError(null);
+          e.target.login.value="";
+          e.target.password.value="";
+          navigate("/")
         }
         else {
           setError(`${data.message}`);
