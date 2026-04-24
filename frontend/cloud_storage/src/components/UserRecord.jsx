@@ -1,20 +1,27 @@
-import { toggleShowDeleteModal } from '../features/usersFeature';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateUserAdminStatus } from '../features/usersFeature';
 import formatSize from '../services/formatSize';
 import formatFileCount from '../services/formatFileCount';
 import DeleteUserModal from './DeleteUserModal';
+import { deleteUserRecord } from '../features/usersFeature';
+import { useState } from 'react';
 
 const UserRecord = ({ user }) => {
   const dispatch = useDispatch();
-  const showDeleteModal = useSelector((state) => state.users.showDeleteModal);
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleToggleAdmin = () => {
     dispatch(updateUserAdminStatus({ id: user.id, is_staff: !user.is_staff }));
   };
 
   const handleDeleteClick = () => {
-    dispatch(toggleShowDeleteModal(true));
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteUserRecord({id: user.id}))
+    setShowDeleteConfirm(false);
   };
 
   return (
@@ -43,7 +50,12 @@ const UserRecord = ({ user }) => {
             disabled={user.is_superuser}>Delete</button>
         </td>
       </tr>
-      {showDeleteModal && <DeleteUserModal />}
+      {showDeleteConfirm && (
+        <DeleteUserModal
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
+        />
+      )}
     </>
   );
 };

@@ -36,6 +36,15 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const deleteUserRecord = createAsyncThunk(
+  'files/deleteFile',
+  async ({ id }) => {
+    await fetch(`http://127.0.0.1:8000/api/users/?user_id=${id}`, {
+      method: 'DELETE',
+    });
+    return id;
+  }
+);
 
 export const loginUser = createAsyncThunk(
   'users/loginUser',
@@ -58,12 +67,8 @@ const usersFeature = createSlice({
     list: [],
     status: 'idle',
     error: null,
-    showDeleteModal: false,
   },
   reducers: {
-    toggleShowDeleteModal(state, action) {
-      state.showDeleteModal = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -104,11 +109,13 @@ const usersFeature = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(deleteUserRecord.fulfilled, (state, action) => {
+        state.list = state.list.filter((user) => user.id !== action.payload);
       });
   },
 });
 
-export const { toggleShowDeleteModal } = usersFeature.actions;
 
 export default usersFeature.reducer;
 

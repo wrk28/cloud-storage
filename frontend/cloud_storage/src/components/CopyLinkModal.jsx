@@ -7,7 +7,7 @@ const CopyLinkModal = ({ link, onClose }) => {
     <div className="modal-backdrop">
       <div className="modal-content">
         <h3>Copy Link</h3>
-        <input type="text" value={link} readOnly style={{ width: '100%' }} />
+        <input type="text" value={link} readOnly/>
         <div className="modal-buttons">
           <button onClick={handleCopy}>Copy</button>
           <button onClick={onClose}>Close</button>
