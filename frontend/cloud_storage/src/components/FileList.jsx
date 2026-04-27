@@ -1,23 +1,33 @@
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFiles } from '../features/filesFeature';
 import FileRecord from './FileRecord';
+import { useParams } from 'react-router-dom';
+import { resetStatus } from '../features/filesFeature';
+import { setUser } from '../features/usersFeature';
+
 import '../styles.css';
 
 const FileList = () => {
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.list);
   const status = useSelector((state) => state.files.status);
-  const userID = useSelector((state) => state.auth.userID);
-  console.log("user ID is", userID);
+  
+  const { userid } = useParams();
+  const userID = userid;
+  dispatch(setUser(userID));
+  
+  useEffect(() => {
+    if (userID) {
+      dispatch(resetStatus());
+    }
+  }, [userID, dispatch]);
 
   useEffect(() => {
-  console.log("useEffect triggered", { status, userID });
   if (userID && status === 'idle') {
-    console.log("Dispatching fetchFiles");
     dispatch(fetchFiles({ id: userID }));
   }
-}, [status, dispatch, userID]);
+  }, [status, dispatch, userID]);
 
   return (
     <div className="file-list">
@@ -39,7 +49,7 @@ const FileList = () => {
           </thead>
           <tbody>
             {files.map((file) => (
-              <FileRecord key={file.id} file={file} />
+              <FileRecord key={file.id} file={file} userID={userID} />
             ))}
           </tbody>
         </table>

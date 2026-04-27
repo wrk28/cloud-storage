@@ -28,6 +28,7 @@ const UserList = () => {
               <th>Total Size</th>
               <th>Admin</th>
               <th>Actions</th>
+              <th>Storage</th>
             </tr>
           </thead>
           <tbody>

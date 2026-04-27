@@ -15,7 +15,7 @@ const MainView = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/users" element={<UserList />} />
-        <Route path="/files" element={<FileList />} />
+        <Route path="/files/:userid" element={<FileList />} />
       </Routes>
     </div>
   );

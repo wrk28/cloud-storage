@@ -5,9 +5,12 @@ import formatFileCount from '../services/formatFileCount';
 import DeleteUserModal from './DeleteUserModal';
 import { deleteUserRecord } from '../features/usersFeature';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserRecord = ({ user }) => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -23,6 +26,12 @@ const UserRecord = ({ user }) => {
     dispatch(deleteUserRecord({id: user.id}))
     setShowDeleteConfirm(false);
   };
+
+  const handleStorageClick = () => {
+     navigate(`/files/${user.id}`);
+  };
+
+  
 
   return (
     <>
@@ -48,6 +57,10 @@ const UserRecord = ({ user }) => {
           <button 
             onClick={handleDeleteClick}
             disabled={user.is_superuser}>Delete</button>
+        </td>
+        <td>
+          <button 
+            onClick={handleStorageClick}>Storage</button>
         </td>
       </tr>
       {showDeleteConfirm && (

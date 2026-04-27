@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) => {
-  console.log("from features user id", id)
   const response = await fetch(`http://127.0.0.1:8000/api/files/?user_id=${id}`);
   const data = await response.json();
   return data.data;
@@ -23,13 +22,11 @@ export const downloadFile = createAsyncThunk(
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${id}`);
       if (!response.ok) throw new Error('Download error');
-      const contentDisposition = response.headers.get('Content-Disposition') || response.headers.get('content-disposition');
+      const contentDisposition = response.headers.get('Content-Disposition');
       let fileName = '';
       if (contentDisposition && contentDisposition.includes('filename=')) {
         fileName = contentDisposition.split('filename=')[1].replace(/["']/g, '');
       }
-      console.log("cont deisp", contentDisposition)
-      console.log("filename is", fileName)
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -99,14 +96,18 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
-const filesSlice = createSlice({
+const filesFeature = createSlice({
   name: 'files',
   initialState: {
     list: [],
     status: 'idle',
     error: null,
   },
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      state.status = 'idle';
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFiles.pending, (state) => {
@@ -146,4 +147,5 @@ const filesSlice = createSlice({
   },
 });
 
-export default filesSlice.reducer;
+export const { resetStatus } = filesFeature.actions;
+export default filesFeature.reducer;

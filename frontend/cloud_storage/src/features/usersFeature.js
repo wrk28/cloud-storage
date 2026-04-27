@@ -49,11 +49,15 @@ export const deleteUserRecord = createAsyncThunk(
 const usersFeature = createSlice({
   name: 'users',
   initialState: {
+    selectedUser: null,
     list: [],
     status: 'idle',
     error: null,
   },
   reducers: {
+     setUser: (state, action) => {
+      state.selectedUser = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -90,6 +94,6 @@ const usersFeature = createSlice({
   },
 });
 
-
+export const {setUser} = usersFeature.actions;
 export default usersFeature.reducer;
 

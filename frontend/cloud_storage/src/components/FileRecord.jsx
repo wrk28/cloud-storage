@@ -7,7 +7,7 @@ import CopyLinkModal from './CopyLinkModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import ChangeDescriptionModal from './ChangeDescriptionModal';
 
-const FileRecord = ({ file }) => {
+const FileRecord = ({ file, userID }) => {
   const dispatch = useDispatch();
 
   const [showCopyLink, setShowCopyLink] = useState(false);
@@ -17,7 +17,7 @@ const FileRecord = ({ file }) => {
 
   const handleDownload = () => {
     dispatch(downloadFile(file.id));
-    dispatch(fetchFiles());
+    dispatch(fetchFiles({id: userID}));
   };
 
   const handleCopyLink = () => {

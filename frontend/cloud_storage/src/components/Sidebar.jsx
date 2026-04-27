@@ -16,8 +16,6 @@ const Sidebar = () => {
   const isAdmin = useSelector((state) => state.auth.isAdmin);
   const userID = useSelector((state) => state.auth.userID);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  //const csrfToken = useSelector((state) => state.auth.csrfToken);
-  //console.log('CSRF Token:', csrfToken);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -44,7 +42,7 @@ const Sidebar = () => {
           </Link>
       )}
       {isLoggedIn && (
-          <Link to="/files" className="sidebar-item link-style">
+          <Link to={`/files/${userID}`} className="sidebar-item link-style">
             My Files
           </Link>
       )}
