@@ -14,6 +14,7 @@ export const deleteFile = createAsyncThunk(
   async ({ id }) => {
     await fetch(`http://127.0.0.1:8000/api/files/?file_id=${id}`, {
       method: 'DELETE',
+      credentials: 'include',
     });
     return id;
   }
@@ -23,7 +24,10 @@ export const downloadFile = createAsyncThunk(
   'files/downloadFile',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${id}`);
+      const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${id}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
       if (!response.ok) throw new Error('Download error');
       const contentDisposition = response.headers.get('Content-Disposition');
       let fileName = '';

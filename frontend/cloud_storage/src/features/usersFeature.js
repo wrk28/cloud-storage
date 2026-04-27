@@ -2,7 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await fetch('http://127.0.0.1:8000/api/users/');
+  const response = await fetch('http://127.0.0.1:8000/api/users/', {
+    method: 'GET',
+    credentials: 'include'
+  });
   const data = await response.json();
   return data.data;
 });
@@ -12,6 +15,7 @@ export const updateUserAdminStatus = createAsyncThunk(
   async ({ id, is_staff }) => {
     await fetch(`http://127.0.0.1:8000/api/users/?user_id=${id}`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -26,6 +30,7 @@ export const registerUser = createAsyncThunk(
   async (userData) => {
     const response = await fetch('http://127.0.0.1:8000/api/auth/register/', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -40,6 +45,7 @@ export const deleteUserRecord = createAsyncThunk(
   'files/deleteFile',
   async ({ id }) => {
     await fetch(`http://127.0.0.1:8000/api/users/?user_id=${id}`, {
+      credentials: 'include',
       method: 'DELETE',
     });
     return id;

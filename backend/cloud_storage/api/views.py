@@ -113,7 +113,7 @@ class FileView(APIView):
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
-        self.check_object_permissions(request, self, user)
+        self.check_object_permissions(request, user)
         files = File.objects.filter(user=user_id)
         serializer = FileListSerializer(files, many=True)
         data = serializer.data
@@ -129,7 +129,7 @@ class FileView(APIView):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, self, file)
+            self.check_object_permissions(request, file)
         except File.DoesNotExist as e:
             logger.error(f"Error: {e}")
             return Response({
@@ -158,7 +158,7 @@ class FileView(APIView):
         file_id = request.query_params.get('file_id');
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, self, file)
+            self.check_object_permissions(request, file)
         except File.DoesNotExist as e:
             logger.error(f"Error: {e}")
             return Response({
@@ -218,7 +218,7 @@ class FileDownloadView(APIView):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, self, file)
+            self.check_object_permissions(request, file)
         except File.DoesNotExist as e:
             logger.error(f"Error: {e}")
             return Response({

@@ -6,7 +6,22 @@ from rest_framework.views import APIView
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
 
+from django.views.generic.edit import FormView
+from django.contrib.auth.forms import AuthenticationForm
+
+from django.http import JsonResponse
+
+class LoginView(FormView):
+    form_class = AuthenticationForm
+    template_name = 'login.html'
+    success_url = '/'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        # CSRF cookie is automatically set if middleware is enabled
+        return response
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
@@ -14,6 +29,7 @@ class RegisterView(generics.CreateAPIView):
 
 class LoginView(APIView):
 
+    @csrf_exempt
     def post(self, request):
         username = request.data.get('username');
         password = request.data.get('password');
@@ -50,5 +66,10 @@ class LogoutView(APIView):
                 "message": "success logot",
                 "status": "success"
             }, status=status.HTTP_200_OK)
+    
+
+def get_csrf_token(request):
+    csrftoken = get_token(request)
+    return JsonResponse({'csrftoken': csrftoken})
 
 
