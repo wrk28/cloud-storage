@@ -22,9 +22,24 @@ export const downloadFile = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${id}`);
-      if (!response.ok) throw new Error('Download failed');
+      if (!response.ok) throw new Error('Download error');
+      const contentDisposition = response.headers.get('Content-Disposition') || response.headers.get('content-disposition');
+      let fileName = '';
+      if (contentDisposition && contentDisposition.includes('filename=')) {
+        fileName = contentDisposition.split('filename=')[1].replace(/["']/g, '');
+      }
+      console.log("cont deisp", contentDisposition)
+      console.log("filename is", fileName)
       const blob = await response.blob();
-      return { fileId, blob };
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      return { id, blob, fileName };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -36,11 +51,12 @@ export const updateFileDescription = createAsyncThunk(
   async ({ id, description }, { rejectWithValue }) => {
     const response = await fetch(`http://127.0.0.1:8000/api/files/?file_id=${id}`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ description }),
     });
     if (!response.ok) {
-      return rejectWithValue('Failed to update description');
+      return rejectWithValue('Update');
     }
     const data = await response.json();
     return { id, description: data.description || description };

@@ -231,8 +231,8 @@ class FileDownloadView(APIView):
         if os.path.exists(path):
             file.last_download = timezone.now()
             file.save()
-            response = FileResponse(open(path, 'rb'), as_attachment=True, filename=name)
-            logger.info("Info: Downloading file")
+            response = FileResponse(open(path, 'rb'))
+            response['Content-Disposition'] = f'attachment; filename="{name}"'
             return response
         else:
             logger.error(f"Error: Cannot find the file")

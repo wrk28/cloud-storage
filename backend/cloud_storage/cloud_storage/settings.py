@@ -65,6 +65,10 @@ MIDDLEWARE = [
     
 ]
 
+CORS_EXPOSE_HEADERS = [
+    'Content-Disposition',
+]
+
 #
 CORS_ALLOW_CREDENTIALS = True
 
@@ -85,10 +89,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 #
-CORS_TRUSTED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-]
+# CORS_TRUSTED_ORIGINS = [
+#     'http://localhost:3000',
+#     'http://127.0.0.1:3000',
+# ]
 
 #
 # CONTENT_SECURITY_POLICY = {
