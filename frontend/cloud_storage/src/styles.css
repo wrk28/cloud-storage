@@ -346,3 +346,11 @@ input[type="checkbox"] {
   border-radius: 4px;
   font-size: 14px;
 }
+
+.text-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; 
+  text-align: center;
+}
