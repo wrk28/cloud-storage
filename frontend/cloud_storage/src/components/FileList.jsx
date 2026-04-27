@@ -9,12 +9,15 @@ const FileList = () => {
   const files = useSelector((state) => state.files.list);
   const status = useSelector((state) => state.files.status);
   const userID = useSelector((state) => state.auth.userID);
+  console.log("user ID is", userID);
 
   useEffect(() => {
-    if (userID && status === 'idle') {
-      dispatch(fetchFiles({ id: userID }));
-    }
-  }, [status, dispatch, userID]);
+  console.log("useEffect triggered", { status, userID });
+  if (userID && status === 'idle') {
+    console.log("Dispatching fetchFiles");
+    dispatch(fetchFiles({ id: userID }));
+  }
+}, [status, dispatch, userID]);
 
   return (
     <div className="file-list">

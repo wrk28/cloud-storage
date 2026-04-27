@@ -27,7 +27,7 @@ class LoginView(APIView):
                 "message": "success login",
                 "status": "success",
                 "auth": {
-                    "username": user.username,
+                    "user_id": user.id,
                     "is_admin": user.is_staff,
                     "is_authenticated": True,
                     "csrf_token": csrf_token,

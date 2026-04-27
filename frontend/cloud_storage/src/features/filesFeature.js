@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) => {
+  console.log("from features user id", id)
   const response = await fetch(`http://127.0.0.1:8000/api/files/?user_id=${id}`);
   const data = await response.json();
   return data.data;
