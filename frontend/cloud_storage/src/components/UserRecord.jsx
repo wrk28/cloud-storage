@@ -31,13 +31,11 @@ const UserRecord = ({ user }) => {
      navigate(`/files/${user.id}`);
   };
 
-  
-
   return (
     <>
       <tr>
         <td>
-          {user.username} {user.is_superuser && "(superuser)"}
+          <>{user.username} {user.is_superuser && "(superuser)"}</>
         </td>
         <td>{user.email}</td>
         <td>

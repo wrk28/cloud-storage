@@ -5,8 +5,9 @@ import FileRecord from './FileRecord';
 import { useParams } from 'react-router-dom';
 import { resetStatus } from '../features/filesFeature';
 import { setUser } from '../features/usersFeature';
-
+import Return from './Return';
 import '../styles.css';
+
 
 const FileList = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const FileList = () => {
       ) : (
         <p>No files</p>
       )}
+      <Return />
     </div>
   );
 };
