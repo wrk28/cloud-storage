@@ -7,6 +7,8 @@ import CopyLinkModal from './CopyLinkModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import ChangeDescriptionModal from './ChangeDescriptionModal';
 
+import formateTime from '../services/formatTime';
+
 const FileRecord = ({ file, userID }) => {
   const dispatch = useDispatch();
 
@@ -51,8 +53,8 @@ const FileRecord = ({ file, userID }) => {
         <td>{file.description}</td>
         <td>{file.size}</td>
         <td>{host}{file.link}</td>
-        <td>{file.when_uploaded}</td>
-        <td>{file.last_download}</td>
+        <td>{formateTime(file.when_uploaded)}</td>
+        <td>{formateTime(file.last_download)}</td>
         <td>
           <button onClick={handleDownload}>Download</button>
         </td>

@@ -7,7 +7,11 @@ const formatSize = (bytes) => {
       size /= 1024;
       unitIndex++;
     }
-    return `${size.toFixed(2)} ${units[unitIndex]}`;
+    if (unitIndex === 0) {
+      return `${size} ${units[unitIndex]}`;
+    } else {
+      return `${size.toFixed(2)} ${units[unitIndex]}`;
+    }
   };
 
 export default formatSize;
