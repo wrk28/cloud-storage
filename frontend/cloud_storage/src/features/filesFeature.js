@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const fetchFiles = createAsyncThunk('files/fetchFiles', async () => {
-  const response = await fetch('http://127.0.0.1:8000/api/files/?user_id=32');
+export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) => {
+  const response = await fetch(`http://127.0.0.1:8000/api/files/?user_id=${id}`);
   const data = await response.json();
   return data.data;
 });
@@ -18,9 +18,9 @@ export const deleteFile = createAsyncThunk(
 
 export const downloadFile = createAsyncThunk(
   'files/downloadFile',
-  async (fileId, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${fileId}`);
+      const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${id}`);
       if (!response.ok) throw new Error('Download failed');
       const blob = await response.blob();
       return { fileId, blob };
@@ -48,19 +48,37 @@ export const updateFileDescription = createAsyncThunk(
 
 export const uploadFile = createAsyncThunk(
   'files/uploadFile',
-  async ({ file, description }, { rejectWithValue }) => {
+  async ({ file, description }, { getState, rejectWithValue }, ) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('description', description);
     formData.append('file_name', file.name);
+
+    const state = getState();
+    const csrfToken = state.auth.csrfToken;
+
+    const cookieMatch = document.cookie.match(/csrftoken=([^;]+)/);
+    if (cookieMatch) {
+      console.log('Cookie CSRF:', cookieMatch[1]);
+    } else {
+      console.log('CSRF cookie not found');
+    }
+    console.log('State CSRF:', csrfToken);
+
     try {
       const response = await fetch('http://127.0.0.1:8000/api/upload/', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
       });
+
       if (!response.ok) {
-        throw new Error('Upload failed');
+        throw new Error('Upload error');
       }
+
       const data = await response.json();
       return data;
     } catch (error) {

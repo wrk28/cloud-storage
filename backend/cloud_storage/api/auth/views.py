@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
+from django.middleware.csrf import get_token
 
 
 class RegisterView(generics.CreateAPIView):
@@ -12,6 +13,7 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LoginView(APIView):
+
     def post(self, request):
         username = request.data.get('username');
         password = request.data.get('password');
@@ -20,13 +22,15 @@ class LoginView(APIView):
             login(request, user);
             user.last_login = timezone.now()
             user.save()
+            csrf_token = get_token(request)
             return Response({
                 "message": "success login",
                 "status": "success",
                 "auth": {
                     "username": user.username,
                     "is_admin": user.is_staff,
-                    "is_authenticated": True
+                    "is_authenticated": True,
+                    "csrf_token": csrf_token,
                 }
             }, status=status.HTTP_200_OK)
         else:

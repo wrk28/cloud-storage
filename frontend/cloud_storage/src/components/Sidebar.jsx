@@ -12,7 +12,10 @@ import { useSelector } from 'react-redux';
 const Sidebar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  //const csrfToken = useSelector((state) => state.auth.csrfToken);
+  //console.log('CSRF Token:', csrfToken);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -32,7 +35,7 @@ const Sidebar = () => {
       <Link to="/" className="sidebar-item link-style">
         Home
       </Link>
-      {isLoggedIn && (
+      {isLoggedIn && isAdmin && (
           <Link to="/users" className="sidebar-item link-style">
             Administration
           </Link>
