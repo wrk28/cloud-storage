@@ -182,7 +182,7 @@ class FileUploadView(APIView):
 
     def post(self, request):
         import uuid
-        user = request.user.id
+        user_id = request.POST.get('user_id')
         file = request.FILES.get('file')
         name = request.data.get('file_name')
         description = request.data.get('description')
@@ -193,7 +193,7 @@ class FileUploadView(APIView):
             for chunk in file.chunks():   
                 p.write(chunk)
         data = {
-            'user': user,
+            'user': user_id,
             'name': name,
             'path': path,
             'link': link,

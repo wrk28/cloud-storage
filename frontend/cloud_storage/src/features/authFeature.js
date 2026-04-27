@@ -40,10 +40,6 @@ const authFeature = createSlice({
             state.isAdmin = responseData.auth.is_admin === true;
             state.userID = responseData.auth.user_id;
             state.csrfToken = responseData.auth.csrf_token;
-            state.sessionID = responseData.auth.sessionid;
-            console.log("State tocken is ", state.csrfToken)
-            console.log("user id is ", state.userID)
-            console.log("responseData.auth.user_id is", responseData.auth.user_id)
         }
         else {
             state.isLoggedIn = false;

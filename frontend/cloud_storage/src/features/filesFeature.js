@@ -72,15 +72,10 @@ export const uploadFile = createAsyncThunk(
     formData.append('file_name', file.name);
 
     const state = getState();
+    const userID= state.auth.userID;
+    formData.append('user_id', userID);
     const csrfToken = state.auth.csrfToken;
-
-    const cookieMatch = document.cookie.match(/csrftoken=([^;]+)/);
-    if (cookieMatch) {
-      console.log('Cookie CSRF:', cookieMatch[1]);
-    } else {
-      console.log('CSRF cookie not found');
-    }
-    console.log('State CSRF:', csrfToken);
+    formData.append('csrfmiddlewaretoken', csrfToken);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/upload/', {

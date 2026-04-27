@@ -3,6 +3,7 @@ import '../styles.css';
 
 import { useDispatch } from 'react-redux';
 import { uploadFile } from '../features/filesFeature';
+import { fetchFiles } from '../features/filesFeature';
 
 import UploadFileModal from './UploadFileModal';
 
@@ -13,6 +14,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isAdmin = useSelector((state) => state.auth.isAdmin);
+  const userID = useSelector((state) => state.auth.userID);
   const [isModalOpen, setIsModalOpen] = useState(false);
   //const csrfToken = useSelector((state) => state.auth.csrfToken);
   //console.log('CSRF Token:', csrfToken);
@@ -27,6 +29,7 @@ const Sidebar = () => {
 
   const handleUpload = ({ file, description }) => {
     dispatch(uploadFile({ file, description }));
+    dispatch(fetchFiles({id: userID}));
     handleCloseModal();
   };
 
