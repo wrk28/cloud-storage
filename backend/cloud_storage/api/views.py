@@ -113,7 +113,7 @@ class FileView(APIView):
                 'status': 'error'
             },
             status=status.HTTP_404_NOT_FOUND)
-        self.check_object_permissions(request, user)
+        self.check_permissions(request)
         files = File.objects.filter(user=user_id)
         serializer = FileListSerializer(files, many=True)
         data = serializer.data

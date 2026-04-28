@@ -18,6 +18,7 @@ staticfiles/
 
 **/migrations/*.py
 **/migrations/*.pyc
+!**/migrations/__init__.py
 
 *.bak
 *.swp

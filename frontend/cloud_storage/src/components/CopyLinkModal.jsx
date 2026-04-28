@@ -10,7 +10,7 @@ const CopyLinkModal = ({ host, link, onClose }) => {
         <h3>Copy Link</h3>
         <input className="modal-input" type="text" value={host+link} readOnly/>
         <div className="modal-buttons">
-          <button onClick={handleCopy}>Copy</button>
+          {/*<button onClick={handleCopy}>Copy</button>*/}
           <button onClick={onClose}>Close</button>
         </div>
       </div>

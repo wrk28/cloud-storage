@@ -1,7 +1,12 @@
 const formateTime = (time) => {
-
-    const date = new Date(time);
-    return date.toLocaleString('en-GB');
+  if (!time) {
+    return '';
+  }
+  const date = new Date(time);
+  if (isNaN(date.getTime())) {
+    return '';
+  }
+  return date.toLocaleString('en-GB');
 }
 
 export default formateTime;

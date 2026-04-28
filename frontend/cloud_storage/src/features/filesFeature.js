@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import config from '../../config';
 
 export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) => {
-  const response = await fetch(`http://127.0.0.1:8000/api/files/?user_id=${id}`, {
+  const response = await fetch(`${config.URL}/api/files/?user_id=${id}`, {
       method: 'GET',
       credentials: 'include',
     });
@@ -12,7 +13,7 @@ export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) =>
 export const deleteFile = createAsyncThunk(
   'files/deleteFile',
   async ({ id }) => {
-    await fetch(`http://127.0.0.1:8000/api/files/?file_id=${id}`, {
+    await fetch(`${config.URL}/api/files/?file_id=${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -24,7 +25,7 @@ export const downloadFile = createAsyncThunk(
   'files/downloadFile',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/download/?file_id=${id}`, {
+      const response = await fetch(`${config.URL}/api/download/?file_id=${id}`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -53,7 +54,7 @@ export const downloadFile = createAsyncThunk(
 export const updateFileDescription = createAsyncThunk(
   'files/updateFileDescription',
   async ({ id, description }, { rejectWithValue }) => {
-    const response = await fetch(`http://127.0.0.1:8000/api/files/?file_id=${id}`, {
+    const response = await fetch(`${config.URL}/api/files/?file_id=${id}`, {
       method: 'PATCH',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -82,7 +83,7 @@ export const uploadFile = createAsyncThunk(
     formData.append('csrfmiddlewaretoken', csrfToken);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/upload/', {
+      const response = await fetch(`${config.URL}/api/upload/`, {
         method: 'POST',
         body: formData,
         credentials: 'include',

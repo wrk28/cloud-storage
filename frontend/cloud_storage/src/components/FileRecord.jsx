@@ -8,6 +8,7 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 import ChangeDescriptionModal from './ChangeDescriptionModal';
 
 import formateTime from '../services/formatTime';
+import config from '../../config';
 
 const FileRecord = ({ file, userID }) => {
   const dispatch = useDispatch();
@@ -46,18 +47,6 @@ const FileRecord = ({ file, userID }) => {
     dispatch(updateFileDescription({ id: file.id, description }));
     setShowChangeModal(false);
   };
-
-  const [config, setConfig] = useState(null);
-  useEffect(() => {
-    fetch('/config.json')
-      .then(res => res.json())
-      .then(config => setConfig(config))
-      .catch(error => console.error(error));
-  }, []);
-
-  if (!config) {
-    return null;
-  }
 
   const host = config.DOWNLOAD_URL;
 

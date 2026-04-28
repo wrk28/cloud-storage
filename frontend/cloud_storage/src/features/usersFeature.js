@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
+import config from '../../config';
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await fetch('http://127.0.0.1:8000/api/users/', {
+  const response = await fetch(`${config.URL}/api/users/`, {
     method: 'GET',
     credentials: 'include'
   });
@@ -13,7 +13,7 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
 export const updateUserAdminStatus = createAsyncThunk(
   'users/updateAdminStatus',
   async ({ id, is_staff }) => {
-    await fetch(`http://127.0.0.1:8000/api/users/?user_id=${id}`, {
+    await fetch(`${config.URL}/api/users/?user_id=${id}`, {
       method: 'PATCH',
       credentials: 'include',
       headers: {
@@ -28,7 +28,7 @@ export const updateUserAdminStatus = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   'users/registerUser',
   async (userData) => {
-    const response = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+    const response = await fetch(`${config.URL}/api/auth/register/`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -44,7 +44,7 @@ export const registerUser = createAsyncThunk(
 export const deleteUserRecord = createAsyncThunk(
   'files/deleteFile',
   async ({ id }) => {
-    await fetch(`http://127.0.0.1:8000/api/users/?user_id=${id}`, {
+    await fetch(`${config.URL}/api/users/?user_id=${id}`, {
       credentials: 'include',
       method: 'DELETE',
     });

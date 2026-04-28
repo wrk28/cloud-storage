@@ -1,15 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-// const getCookies = (name) => {
-//   const value = `; ${document.cookie}`;
-//   console.log("value is", value)
-//   const parts = value.split(`; ${name}=`);
-//   if (parts.length === 2) return parts.pop().split(';').shift();
-// }
+import config from '../../config';
 
 
 const getCsrfToken = async () => {
-  const response = await fetch('http://127.0.0.1:8000/api/auth/login/csrf/', {
+  const response = await fetch(`${config.URL}/api/auth/login/csrf/`, {
     credentials: 'include',
   });
   const data = await response.json();
@@ -22,7 +16,7 @@ export const loginUser = createAsyncThunk(
     const token_data = await getCsrfToken();
     const csrfToken = token_data.csrftoken;
     console.log("token is ", csrfToken)
-    const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+    const response = await fetch(`${config.URL}/api/auth/login/`, {
       credentials: 'include',
       method: 'POST',
       headers: {
