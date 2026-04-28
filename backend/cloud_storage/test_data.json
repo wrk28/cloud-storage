@@ -3,24 +3,24 @@
     "model": "auth.User",
     "pk": 1,
     "fields": {
-      "username": "login_1",
-      "first_name": "user_1",
-      "last_name": "user_1",
-      "email": "login_1@email.ru",
-      "password": "",
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@email.ru",
+      "password": "admin",
       "is_staff": true,
-      "is_superuser": false
+      "is_superuser": true
     }
   },
     {
     "model": "auth.User",
     "pk": 2,
     "fields": {
-      "username": "login_2",
-      "first_name": "user_2",
-      "last_name": "user_2",
-      "email": "login_2@email.ru",
-      "password": "",
+      "username": "user",
+      "first_name": "",
+      "last_name": "",
+      "email": "user@email.ru",
+      "password": "user",
       "is_staff": false,
       "is_superuser": false
     }

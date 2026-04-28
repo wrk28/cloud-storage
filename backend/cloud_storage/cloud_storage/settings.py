@@ -14,15 +14,13 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
-
-load_dotenv();
-
-MEDIA_DIR = os.getenv("MEDIA_DIR")
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+dotenv_path = os.path.abspath(os.path.join(BASE_DIR, '../../', '.env'))
+load_dotenv(dotenv_path=dotenv_path);
+
+MEDIA_DIR = os.getenv("MEDIA_DIR")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -33,8 +31,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Application definition
 
@@ -161,7 +161,6 @@ DATABASES = {
         'PORT': os.getenv("DATABASE_PORT")
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

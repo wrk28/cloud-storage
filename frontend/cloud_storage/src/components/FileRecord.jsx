@@ -47,7 +47,15 @@ const FileRecord = ({ file, userID }) => {
     setShowChangeModal(false);
   };
 
-  const host = "http://127.0.0.1:8000/api/download/external/?link="
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    fetch('/config.json')
+      .then(res => res.json())
+      .then(config => setConfig(config.DOWNLOAD_URL));
+  }, []);
+
+  const host = config.DOWNLOAD_URL;
 
   return (
     <>
