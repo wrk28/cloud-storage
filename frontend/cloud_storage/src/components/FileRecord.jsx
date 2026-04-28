@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteFile, downloadFile, updateFileDescription } from '../features/filesFeature';
 import { fetchFiles } from '../features/filesFeature';
@@ -48,12 +48,16 @@ const FileRecord = ({ file, userID }) => {
   };
 
   const [config, setConfig] = useState(null);
-
   useEffect(() => {
     fetch('/config.json')
       .then(res => res.json())
-      .then(config => setConfig(config.DOWNLOAD_URL));
+      .then(config => setConfig(config))
+      .catch(error => console.error(error));
   }, []);
+
+  if (!config) {
+    return null;
+  }
 
   const host = config.DOWNLOAD_URL;
 
