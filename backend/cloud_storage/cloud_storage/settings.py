@@ -69,10 +69,8 @@ CORS_EXPOSE_HEADERS = [
     'Content-Disposition',
 ]
 
-#
 CORS_ALLOW_CREDENTIALS = True
 
-#
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = False
@@ -81,13 +79,11 @@ CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 
-#
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
 
-#
 CORS_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -97,11 +93,6 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
-
-#
-# CONTENT_SECURITY_POLICY = {
-#     'default-src': ("'self'", "'unsafe-inline'", "'unsafe-eval'", "*"),
-# }
 
 LOGGING = {
     'version': 1,

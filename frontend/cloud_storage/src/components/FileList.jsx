@@ -16,20 +16,22 @@ const FileList = () => {
   
   const { userid } = useParams();
   const userID = userid;
-  dispatch(setUser(userID));
-  
+
   useEffect(() => {
     if (userID) {
+      dispatch(setUser(userID));
       dispatch(resetStatus());
     }
   }, [userID, dispatch]);
 
   useEffect(() => {
-  if (userID && status === 'idle') {
-    dispatch(fetchFiles({ id: userID }));
-  }
-  }, [status, dispatch, userID]);
+    if (userID && status === 'idle') {
+      dispatch(fetchFiles({ id: userID }));
+    }
+  }, [status, userID, dispatch]);
 
+  console.log(files);
+  
   return (
     <div className="file-list">
       {Array.isArray(files) && files.length > 0 ? (

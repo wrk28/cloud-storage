@@ -23,7 +23,9 @@ const UserRecord = ({ user }) => {
   };
 
   const handleConfirmDelete = () => {
-    dispatch(deleteUserRecord({id: user.id}))
+    dispatch(deleteUserRecord({id: user.id})).then(() => {
+      dispatch(fetchUsers());
+    });
     setShowDeleteConfirm(false);
   };
 
@@ -35,7 +37,7 @@ const UserRecord = ({ user }) => {
     <>
       <tr>
         <td>
-          <>{user.username} {user.is_superuser && "(superuser)"}</>
+          {user.username} {user.is_superuser && "(superuser)"}
         </td>
         <td>{user.email}</td>
         <td>

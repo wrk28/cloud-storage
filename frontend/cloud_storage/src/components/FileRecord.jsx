@@ -18,8 +18,9 @@ const FileRecord = ({ file, userID }) => {
   const [description, setDescription] = useState(file.description);
 
   const handleDownload = () => {
-    dispatch(downloadFile(file.id));
-    dispatch(fetchFiles({id: userID}));
+    dispatch(downloadFile(file.id)).then(() => {
+      dispatch(fetchFiles({id: userID}))
+    });
   };
 
   const handleCopyLink = () => {
@@ -35,7 +36,9 @@ const FileRecord = ({ file, userID }) => {
   };
 
   const handleConfirmDelete = () => {
-    dispatch(deleteFile({ id: file.id }));
+    dispatch(deleteFile({ id: file.id })).then(() => {
+      dispatch(fetchFiles({id: userID}))
+    });
     setShowDeleteConfirm(false);
   };
 
