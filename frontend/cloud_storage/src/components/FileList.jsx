@@ -29,8 +29,6 @@ const FileList = () => {
       dispatch(fetchFiles({ id: userID }));
     }
   }, [status, userID, dispatch]);
-
-  console.log(files);
   
   return (
     <div className="file-list">

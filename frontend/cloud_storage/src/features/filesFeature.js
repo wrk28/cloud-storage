@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import getCsrfToken from '../services/getCsrfToken';
 import config from '../../config';
 
 export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) => {
@@ -54,10 +55,16 @@ export const downloadFile = createAsyncThunk(
 export const updateFileDescription = createAsyncThunk(
   'files/updateFileDescription',
   async ({ id, description }, { rejectWithValue }) => {
+    const csrfToken = getCsrfToken();
+    console.log("Csrf");
+    console.log("Csrf is ", csrfToken);
     const response = await fetch(`${config.URL}/api/files/?file_id=${id}`, {
       method: 'PATCH',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+      },
       body: JSON.stringify({ description }),
     });
     if (!response.ok) {

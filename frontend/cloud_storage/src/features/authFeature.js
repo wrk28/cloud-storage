@@ -15,7 +15,6 @@ export const loginUser = createAsyncThunk(
   async (credentials) => {
     const token_data = await getCsrfToken();
     const csrfToken = token_data.csrftoken;
-    console.log("token is ", csrfToken)
     const response = await fetch(`${config.URL}/api/auth/login/`, {
       credentials: 'include',
       method: 'POST',
