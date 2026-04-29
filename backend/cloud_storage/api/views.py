@@ -129,7 +129,7 @@ class FileView(APIView):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, file)
+            self.check_permissions(request)
         except File.DoesNotExist as e:
             logger.error(f"Error: {e}")
             return Response({
@@ -158,7 +158,7 @@ class FileView(APIView):
         file_id = request.query_params.get('file_id');
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, file)
+            self.check_permissions(request)
         except File.DoesNotExist as e:
             logger.error(f"Error: {e}")
             return Response({
@@ -218,7 +218,7 @@ class FileDownloadView(APIView):
         file_id = request.query_params.get('file_id')
         try:
             file = File.objects.get(pk=file_id)
-            self.check_object_permissions(request, file)
+            self.check_permissions(request)
         except File.DoesNotExist as e:
             logger.error(f"Error: {e}")
             return Response({
