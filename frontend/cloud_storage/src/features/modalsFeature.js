@@ -5,11 +5,12 @@ const initialState = {
   copyLinkModal: false,
   deleteFileModal: false,
   deleteUserRecordModal: false,
-  uploadFileModal: false
+  uploadFileModal: false,
+  previewFileModal: false
 };
 
 const modalsFeature = createSlice({
-  name: 'modal',
+  name: 'modals',
   initialState,
   reducers: {
     showModal: (state, action) => {

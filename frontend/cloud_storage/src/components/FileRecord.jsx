@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteFile, downloadFile, updateFileDescription } from '../features/filesFeature';
 import { fetchFiles } from '../features/filesFeature';
+import { showModal } from '../features/modalsFeature';
+import { previewFile } from '../features/filesFeature';
 
 import CopyLinkModal from './CopyLinkModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
@@ -48,6 +50,11 @@ const FileRecord = ({ file, userID }) => {
     setShowChangeModal(false);
   };
 
+  const handlePreview = () => {
+    dispatch(showModal('previewFileModal'));
+    dispatch(previewFile({id: file.id}));
+  };
+
   const host = config.DOWNLOAD_URL;
 
   return (
@@ -59,6 +66,9 @@ const FileRecord = ({ file, userID }) => {
         <td>{host}{file.link}</td>
         <td>{formateTime(file.when_uploaded)}</td>
         <td>{formateTime(file.last_download)}</td>
+        <td>
+          <button onClick={handlePreview}>Preview</button>
+        </td>
         <td>
           <button onClick={handleDownload}>Download</button>
         </td>

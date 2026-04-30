@@ -14,6 +14,8 @@ from api.serializers import UserListSerializer, UserPatchSerializer, \
 from api.lib.services import delete_file_from_storage, delete_user_files
 import os
 import logging
+import base64
+import mimetypes
 
 logger = logging.getLogger(__name__);
 
@@ -234,6 +236,41 @@ class FileDownloadView(APIView):
             response = FileResponse(open(path, 'rb'))
             response['Content-Disposition'] = f'attachment; filename="{name}"'
             return response
+        else:
+            logger.error(f"Error: Cannot find the file")
+            return Response({
+                'message': 'File not found',
+                'status': 'error'
+            }, status=status.HTTP_404_NOT_FOUND)
+     
+        
+class FilePreviewView(APIView):
+
+    permission_classes = [IsAuthenticated, IsAdminOrAuthor]
+
+    def get(self, request):
+        file_id = request.query_params.get('file_id')
+        try:
+            file = File.objects.get(pk=file_id)
+            self.check_permissions(request)
+        except File.DoesNotExist as e:
+            logger.error(f"Error: {e}")
+            return Response({
+                'message': 'File is not found',
+                'status': 'error'
+            },
+            status=status.HTTP_404_NOT_FOUND)
+        path = file.path
+        file_name = file.name
+        if os.path.exists(path):
+            content_type, _ = mimetypes.guess_type(path)
+            with open(path, 'rb') as f:
+                file_encoded = base64.b64encode(f.read()).decode('utf-8')
+            return Response({
+                'file': file_encoded, 
+                'content_type': content_type,
+                'file_name': file_name
+            }, status=status.HTTP_200_OK)
         else:
             logger.error(f"Error: Cannot find the file")
             return Response({

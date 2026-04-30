@@ -1,4 +1,4 @@
-import { useEffect, useId } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFiles } from '../features/filesFeature';
 import FileRecord from './FileRecord';
@@ -7,12 +7,16 @@ import { resetStatus } from '../features/filesFeature';
 import { setUser } from '../features/usersFeature';
 import Return from './Return';
 import '../styles.css';
+import PreviewFileModal from './PreviewFileModal';
+import { hideModal } from '../features/modalsFeature';
 
 
 const FileList = () => {
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.list);
   const status = useSelector((state) => state.files.status);
+  
+  const isPreviewFileModal = useSelector((state) => state.modals.previewFileModal);
   
   const { userid } = useParams();
   const userID = userid;
@@ -29,6 +33,10 @@ const FileList = () => {
       dispatch(fetchFiles({ id: userID }));
     }
   }, [status, userID, dispatch]);
+
+  const handleClosePreviewFileModal = () => {
+    dispatch(hideModal('previewFileModal'));
+  };
   
   return (
     <div className="file-list">
@@ -42,6 +50,7 @@ const FileList = () => {
               <th>Link</th>
               <th>Uploaded At</th>
               <th>Last Download</th>
+              <th>Preview</th>
               <th>Download</th>
               <th>Copy Link</th>
               <th>Change</th>
@@ -58,6 +67,7 @@ const FileList = () => {
         <p>No files</p>
       )}
       <Return />
+      {isPreviewFileModal && <PreviewFileModal onClose={handleClosePreviewFileModal}/>}
     </div>
   );
 };

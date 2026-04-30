@@ -114,10 +114,25 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
+export const previewFile = createAsyncThunk(
+  'files/previewFile',
+  async ({ id }) => {
+    const response = await fetch(`${config.URL}/api/preview/?file_id=${id}`, {
+        method: 'GET',
+        credentials: 'include',
+      }
+    );
+    const data = await response.json();
+    return data;
+  }
+);
+
 const filesFeature = createSlice({
   name: 'files',
   initialState: {
     list: [],
+    previewFile: null,
+    isPreviewFileDownloaded: false,
     status: 'idle',
     error: null,
   },
@@ -161,6 +176,13 @@ const filesFeature = createSlice({
       })
       .addCase(uploadFile.fulfilled, (state, action) => {
         state.list.push(action.payload);
+      })
+      .addCase(previewFile.pending, (state) => {
+        state.isPreviewFileDownloaded = false;
+      })
+      .addCase(previewFile.fulfilled, (state, action) => {
+        state.previewFile = action.payload;
+        state.isPreviewFileDownloaded = true;
       });
   },
 });
