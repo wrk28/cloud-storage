@@ -112,7 +112,7 @@ sudo systemctl enable nginx
 ```
 11. Установите необходимые пакеты для Django, для этого перейдтие в папку Django и выполните слежующие действия
 ```
-cd /var/www/cloud-project/backend/cloud_project
+cd /var/www/cloud-project/backend/cloud_storage
 ```
 Создайте и активируйте виртуальное окружение и установите нужные пакеты. Не выходите из виртуального окружения
 ```

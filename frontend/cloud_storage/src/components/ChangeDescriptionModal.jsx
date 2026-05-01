@@ -1,7 +1,15 @@
-const ChangeDescriptionModal = ({ description, setDescription, onSave, onCancel }) => (
+const ChangeDescriptionModal = ({ name, description, setName, setDescription, onSave, onCancel }) => (
   <div className="modal-backdrop">
     <div className="modal-content">
       <h3>Change Description</h3>
+      <div>Name</div>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        style={{ width: '100%', marginBottom: '10px' }}
+      />
+      <div>Description</div>
       <input
         type="text"
         value={description}

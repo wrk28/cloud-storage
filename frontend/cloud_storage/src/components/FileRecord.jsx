@@ -18,6 +18,7 @@ const FileRecord = ({ file, userID }) => {
   const [showCopyLink, setShowCopyLink] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showChangeModal, setShowChangeModal] = useState(false);
+  const [name, setName] = useState(file.name);
   const [description, setDescription] = useState(file.description);
 
   const handleDownload = () => {
@@ -46,7 +47,7 @@ const FileRecord = ({ file, userID }) => {
   };
 
   const handleUpdateDescription = () => {
-    dispatch(updateFileDescription({ id: file.id, description }));
+    dispatch(updateFileDescription({ id: file.id, name, description }));
     setShowChangeModal(false);
   };
 
@@ -96,7 +97,9 @@ const FileRecord = ({ file, userID }) => {
 
       {showChangeModal && (
         <ChangeDescriptionModal
+          name={name}
           description={description}
+          setName={setName}
           setDescription={setDescription}
           onSave={handleUpdateDescription}
           onCancel={() => setShowChangeModal(false)}
