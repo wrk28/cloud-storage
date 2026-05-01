@@ -70,31 +70,42 @@ CORS_EXPOSE_HEADERS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = False
-SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
 
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'http://168.222.142.208:3000',
-    'http://168.222.142.208'
+    'http://168.222.143.85:3000',
+    'http://168.222.143.85'
 
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'http://168.222.142.208:3000',
-    'http://168.222.142.208'
+    'http://168.222.143.85:3000',
+    'http://168.222.143.85'
 
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://168.222.143.85:3000',
+    'http://168.222.143.85',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
 
 LOGGING = {
