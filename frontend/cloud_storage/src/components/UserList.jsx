@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from '../features/usersFeature';
 import UserRecord from './UserRecord';
-import Return from './Return';
+import Return from './PrivateRoute';
 import '../styles.css';
 
 const UserList = () => {
@@ -41,7 +41,6 @@ const UserList = () => {
       ) : (
         <p>No users</p>
       )}
-      <Return />
     </div>
   );
 };

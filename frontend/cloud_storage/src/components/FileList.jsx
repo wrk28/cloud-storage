@@ -5,7 +5,7 @@ import FileRecord from './FileRecord';
 import { useParams } from 'react-router-dom';
 import { resetStatus } from '../features/filesFeature';
 import { setUser } from '../features/usersFeature';
-import Return from './Return';
+import Return from './PrivateRoute';
 import '../styles.css';
 import PreviewFileModal from './PreviewFileModal';
 import { hideModal } from '../features/modalsFeature';
@@ -66,7 +66,6 @@ const FileList = () => {
       ) : (
         <p>No files</p>
       )}
-      <Return />
       {isPreviewFileModal && <PreviewFileModal onClose={handleClosePreviewFileModal}/>}
     </div>
   );
