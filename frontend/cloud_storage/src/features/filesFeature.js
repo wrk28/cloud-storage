@@ -59,7 +59,7 @@ export const downloadFile = createAsyncThunk(
 
 export const updateFileDescription = createAsyncThunk(
   'files/updateFileDescription',
-  async ({ id, description }, { rejectWithValue }) => {
+  async ({ id, name, description }, { rejectWithValue }) => {
     const csrfToken = getCsrfToken();
     const response = await fetch(`${config.URL}/api/files/?file_id=${id}`, {
       method: 'PATCH',
@@ -68,13 +68,13 @@ export const updateFileDescription = createAsyncThunk(
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
       },
-      body: JSON.stringify({ description }),
+      body: JSON.stringify({ name, description }),
     });
     if (!response.ok) {
       return rejectWithValue('Update');
     }
     const data = await response.json();
-    return { id, description: data.description || description };
+    return data;
   }
 );
 
