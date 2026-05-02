@@ -86,7 +86,7 @@ nano /etc/nginx/sites-available/default
 ```
 server {
   listen 80;
-  server_name 168.222.142.208;
+  server_name 168.222.143.85;
 
   root /var/www/cloud-storage/frontend/cloud_storage/dist;
   index index.html;
