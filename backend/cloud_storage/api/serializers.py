@@ -21,7 +21,7 @@ class FileListSerializer(serializers.ModelSerializer):
 class FilePatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'description']
+        fields = ['id', 'name', 'description']
 
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:

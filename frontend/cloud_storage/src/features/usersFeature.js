@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import getCsrfToken from '../services/getCsrfToken';
 import config from '../../config';
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
@@ -13,8 +12,9 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
 
 export const updateUserAdminStatus = createAsyncThunk(
   'users/updateAdminStatus',
-  async ({ id, is_staff }) => {
-    const csrfToken = getCsrfToken();
+  async ({ id, is_staff }, { getState }) => {
+    const state = getState();
+    const csrfToken = state.auth.csrfToken;
     await fetch(`${config.URL}/api/users/?user_id=${id}`, {
       method: 'PATCH',
       credentials: 'include',
@@ -30,8 +30,9 @@ export const updateUserAdminStatus = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'users/registerUser',
-  async (userData) => {
-    const csrfToken = getCsrfToken();
+  async (userData, { getState }) => {
+    const state = getState();
+    const csrfToken = state.auth.csrfToken;
     const response = await fetch(`${config.URL}/api/auth/register/`, {
       method: 'POST',
       credentials: 'include',
@@ -48,8 +49,9 @@ export const registerUser = createAsyncThunk(
 
 export const deleteUserRecord = createAsyncThunk(
   'files/deleteFile',
-  async ({ id }) => {
-    const csrfToken = getCsrfToken();
+  async ({ id }, { getState }) => {
+    const state = getState();
+    const csrfToken = state.auth.csrfToken;
     await fetch(`${config.URL}/api/users/?user_id=${id}`, {
       credentials: 'include',
       method: 'DELETE',

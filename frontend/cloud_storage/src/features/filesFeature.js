@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import getCsrfToken from '../services/getCsrfToken';
 import config from '../../config';
 
 export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) => {
   const response = await fetch(`${config.URL}/api/files/?user_id=${id}`, {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'include'
     });
   const data = await response.json();
   return data.data;
@@ -13,8 +12,9 @@ export const fetchFiles = createAsyncThunk('files/fetchFiles', async ({ id }) =>
 
 export const deleteFile = createAsyncThunk(
   'files/deleteFile',
-  async ({ id }) => {
-    const csrfToken = getCsrfToken();
+  async ({ id }, {getState}) => {
+    const state = getState();
+    const csrfToken = state.auth.csrfToken;
     await fetch(`${config.URL}/api/files/?file_id=${id}`, {
       method: 'DELETE',
       credentials: 'include',
@@ -59,8 +59,9 @@ export const downloadFile = createAsyncThunk(
 
 export const updateFileDescription = createAsyncThunk(
   'files/updateFileDescription',
-  async ({ id, name, description }, { rejectWithValue }) => {
-    const csrfToken = getCsrfToken();
+  async ({ id, name, description }, { getState, rejectWithValue }) => {
+    const state = getState();
+    const csrfToken = state.auth.csrfToken;
     const response = await fetch(`${config.URL}/api/files/?file_id=${id}`, {
       method: 'PATCH',
       credentials: 'include',
@@ -133,6 +134,7 @@ const filesFeature = createSlice({
     list: [],
     previewFile: null,
     isPreviewFileDownloaded: false,
+    csrfToken: null,
     status: 'idle',
     error: null,
   },
@@ -168,9 +170,10 @@ const filesFeature = createSlice({
         window.URL.revokeObjectURL(url);
       })
       .addCase(updateFileDescription.fulfilled, (state, action) => {
-        const { id, description } = action.payload;
+        const { id, name, description } = action.payload;
         const file = state.list.find((f) => f.id === id);
         if (file) {
+          file.name = name;
           file.description = description;
         }
       })

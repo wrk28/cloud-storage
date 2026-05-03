@@ -5,6 +5,7 @@ import config from '../../config';
 const getCsrfToken = async () => {
   const response = await fetch(`${config.URL}/api/auth/login/csrf/`, {
     credentials: 'include',
+    method: 'GET'
   });
   const data = await response.json();
   return data;

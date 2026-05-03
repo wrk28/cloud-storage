@@ -66,8 +66,8 @@ nano config.js
 ```
 const config =
 {
-  "URL": "http://168.222.142.208:8000",
-  "DOWNLOAD_URL":"http://168.222.142.208/api/download/external/?link="
+  "URL": "http://168.222.143.85:8000",
+  "DOWNLOAD_URL":"http://168.222.143.85/api/download/external/?link="
 }
 
 export default config;
@@ -86,7 +86,7 @@ nano /etc/nginx/sites-available/default
 ```
 server {
   listen 80;
-  server_name 168.222.142.208;
+  server_name 168.222.143.85;
 
   root /var/www/cloud-storage/frontend/cloud_storage/dist;
   index index.html;
@@ -112,7 +112,7 @@ sudo systemctl enable nginx
 ```
 11. Установите необходимые пакеты для Django, для этого перейдтие в папку Django и выполните слежующие действия
 ```
-cd /var/www/cloud-project/backend/cloud_storage
+cd /var/www/cloud-storage/backend/cloud_storage
 ```
 Создайте и активируйте виртуальное окружение и установите нужные пакеты. Не выходите из виртуального окружения
 ```

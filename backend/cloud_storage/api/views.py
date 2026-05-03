@@ -171,7 +171,7 @@ class FileView(APIView):
         serializer = FilePatchSerializer(file, request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            logger.info("Info: Changing file description")
+            logger.info("Info: Changing file data")
             return Response(serializer.data)
         else:
             logger.error(f"Error: {serializer.errors}")
